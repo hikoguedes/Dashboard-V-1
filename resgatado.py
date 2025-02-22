@@ -25,7 +25,7 @@ st.set_page_config(layout="wide")
 # 🔹 FUNÇÃO PARA CARREGAR DADOS (CSV ou XLSX)
 # ============================
 
-def load_data(filepath, sep=';'):
+def load_data(filepath, sep=','):
     """
     Função para carregar arquivos CSV ou XLSX com tratamento de erros.
     """
