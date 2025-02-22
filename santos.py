@@ -1582,10 +1582,22 @@ if not df_filtrado.empty:
                     color=cores.get(ano, 'black'),
                     label=str(ano))
 
-            for i, row in df_ano.iterrows():
-                ax.text(row['Mês'], row['Valor vendido'],
-                        f"R$ {row['Valor vendido']:,.0f}\n{int(row['# Clientes'])} clientes",
-                        ha='center', va='bottom', fontsize=8)
+ # Converter valores para numérico e preencher NaN com 0
+df_vendas_agrupadas['Valor vendido'] = pd.to_numeric(
+    df_vendas_agrupadas['Valor vendido'], errors='coerce').fillna(0)
+df_vendas_agrupadas['# Clientes'] = pd.to_numeric(
+    df_vendas_agrupadas['# Clientes'], errors='coerce').fillna(0)
+
+# Plotando o gráfico com verificação de dados
+for i, row in df_vendas_agrupadas.iterrows():
+    valor_vendido = row['Valor vendido'] if pd.notnull(
+        row['Valor vendido']) else 0
+    qtd_clientes = int(row['# Clientes']) if pd.notnull(
+        row['# Clientes']) else 0
+
+    ax.text(row['Mês'], valor_vendido,
+            f"R$ {valor_vendido:,.0f}\n{qtd_clientes} clientes",
+            ha='center', va='bottom', fontsize=8)
 
     ax.set_xlabel('Mês')
     ax.set_ylabel('Valor Vendido (R$)')
