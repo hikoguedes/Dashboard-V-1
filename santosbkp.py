@@ -175,8 +175,8 @@ mask_data = (df_filtrado['Data da Venda'].dt.date >= data_inicio) & (
     df_filtrado['Data da Venda'].dt.date <= data_fim)
 df_filtrado = df_filtrado[mask_data]
 
-ifGERENTE != 'Todos':
-    df_filtrado = df_filtrado[df_filtrado['GERENTE'] ==GERENTE]
+if gerente != 'Todos':
+    df_filtrado = df_filtrado[df_filtrado['GERENTE'] == gerente]
 if corretor1 != 'Todos':
     df_filtrado = df_filtrado[df_filtrado['Corretor 1'] == corretor1]
 if corretor2 != 'Todos':
@@ -979,10 +979,10 @@ if pagina == 'RANKING':
         col1, col2 = st.columns(2)
 
         # ============================
-        # 📊 1️⃣GERENTE: Latência + Produtos
+        # 📊 1️⃣ GERENTE: Latência + Produtos
         # ============================
         with col1:
-            st.subheader("Ranking de Vendas porGERENTE")
+            st.subheader("Ranking de Vendas por GERENTE")
             ranking_gerente = df_filtrado.groupby('GERENTE').agg({
                 'Valor vendido': 'sum',
                 'PRODUTO': 'count',
@@ -998,7 +998,7 @@ if pagina == 'RANKING':
                 'Valor vendido', ascending=False)
             st.dataframe(ranking_gerente)
 
-            # Gráfico paraGERENTE
+            # Gráfico para GERENTE
             chart = alt.Chart(ranking_gerente).mark_bar().encode(
                 x=alt.X('GERENTE:N', title='Gerente'),
                 y=alt.Y('Valor vendido:Q', title='Valor Vendido (R$)'),
@@ -1013,7 +1013,7 @@ if pagina == 'RANKING':
             ).properties(
                 width=400,
                 height=400,
-                title='Vendas porGERENTE'
+                title='Vendas por GERENTE'
             )
             st.altair_chart(chart, use_container_width=True)
 
@@ -1073,7 +1073,7 @@ if pagina == 'RANKING':
         col3, col4 = st.columns(2)
 
         # ============================
-        # 📊 3️⃣GERENTE com Desconto Financeiro
+        # 📊 3️⃣ GERENTE com Desconto Financeiro
         # ============================
         with col3:
             st.subheader("GERENTES com Desconto Financeiro")
@@ -1104,7 +1104,7 @@ if pagina == 'RANKING':
             ).properties(
                 width=400,
                 height=400,
-                title='Desconto Financeiro porGERENTE'
+                title='Desconto Financeiro por GERENTE'
             )
             st.altair_chart(chart, use_container_width=True)
 
@@ -1163,7 +1163,7 @@ if pagina == 'RANKING':
         # ============================
 
         # Título do app
-        st.title("📊 Ranking de Vendas porGERENTE por Ano (2022 - 2025)")
+        st.title("📊 Ranking de Vendas por Gerente por Ano (2022 - 2025)")
 
         # Filtro de anos disponíveis
         anos_disponiveis = sorted(df_filtrado['Ano'].unique().tolist())
@@ -1234,7 +1234,7 @@ if pagina == 'RANKING':
         # ============================
         # 🔹 TABELA DE DADOS (Opcional)
         # ============================
-        st.subheader("📋 Dados de Vendas por Ano eGERENTE")
+        st.subheader("📋 Dados de Vendas por Ano e Gerente")
         st.dataframe(ranking_gerente_ano)
 
     else:
