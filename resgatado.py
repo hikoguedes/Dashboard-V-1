@@ -145,7 +145,7 @@ df_filtrado = df[(df['Data da Venda'].dt.date >= data_inicio)
 
 # Demais filtros
 gerente = st.sidebar.selectbox(
-    'GERENTE', ['Todos'] + list(df[' GERENTE'].unique()))
+    'GERENTE', ['Todos'] + list(df['GERENTE'].unique()))
 corretor1 = st.sidebar.selectbox(
     'Corretor 1', ['Todos'] + list(df['Corretor 1'].unique()))
 corretor2 = st.sidebar.selectbox(
@@ -173,7 +173,7 @@ mask_data = (df_filtrado['Data da Venda'].dt.date >= data_inicio) & (
 df_filtrado = df_filtrado[mask_data]
 
 if gerente != 'Todos':
-    df_filtrado = df_filtrado[df_filtrado[' GERENTE'] == gerente]
+    df_filtrado = df_filtrado[df_filtrado['GERENTE'] == gerente]
 if corretor1 != 'Todos':
     df_filtrado = df_filtrado[df_filtrado['Corretor 1'] == corretor1]
 if corretor2 != 'Todos':
@@ -952,7 +952,7 @@ if pagina == 'RANKING':
         # ============================
         with col1:
             st.subheader("Ranking de Vendas por GERENTE")
-            ranking_gerente = df_filtrado.groupby(' GERENTE').agg({
+            ranking_gerente = df_filtrado.groupby('GERENTE').agg({
                 'Valor vendido': 'sum',
                 'PRODUTO': 'count',
                 'Latência de compra': 'mean'
@@ -969,11 +969,11 @@ if pagina == 'RANKING':
 
             # Gráfico para GERENTE
             chart = alt.Chart(ranking_gerente).mark_bar().encode(
-                x=alt.X(' GERENTE:N', title='Gerente'),
+                x=alt.X('GERENTE:N', title='Gerente'),
                 y=alt.Y('Valor vendido:Q', title='Valor Vendido (R$)'),
-                color=alt.Color(' GERENTE:N', title='Gerente'),
+                color=alt.Color('GERENTE:N', title='Gerente'),
                 tooltip=[
-                    alt.Tooltip(' GERENTE:N', title='Gerente'),
+                    alt.Tooltip('GERENTE:N', title='Gerente'),
                     alt.Tooltip('Valor vendido:Q',
                                 title='Valor Vendido', format=',.2f'),
                     alt.Tooltip('Média de Latência (Dias):Q',
@@ -1035,12 +1035,12 @@ if pagina == 'RANKING':
         # ============================
         with col3:
             st.subheader("GERENTES com Desconto Financeiro")
-            ranking_gerente_desc = df_filtrado.groupby(' GERENTE').agg({
+            ranking_gerente_desc = df_filtrado.groupby('GERENTE').agg({
                 'Valor vendido': 'sum',
                 'Desconto Financeiro': 'sum'
             }).reset_index()
 
-            ranking_melted = ranking_gerente_desc.melt(id_vars=' GERENTE',
+            ranking_melted = ranking_gerente_desc.melt(id_vars='GERENTE',
                                                        value_vars=[
                                                            'Valor vendido', 'Desconto Financeiro'],
                                                        var_name='Tipo',
@@ -1050,12 +1050,12 @@ if pagina == 'RANKING':
                                     range=['skyblue', 'red'])
 
             chart = alt.Chart(ranking_melted).mark_bar().encode(
-                x=alt.X(' GERENTE:N', title='Gerente', sort='-y'),
+                x=alt.X('GERENTE:N', title='Gerente', sort='-y'),
                 y=alt.Y('Valor:Q', title='Valor Total (R$)'),
                 color=alt.Color('Tipo:N', scale=color_scale,
                                 title='Tipo de Valor'),
                 tooltip=[
-                    alt.Tooltip(' GERENTE:N', title='Gerente'),
+                    alt.Tooltip('GERENTE:N', title='Gerente'),
                     alt.Tooltip('Tipo:N', title='Tipo'),
                     alt.Tooltip('Valor:Q', title='Valor (R$)', format=',.2f')
                 ]
