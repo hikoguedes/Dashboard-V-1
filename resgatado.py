@@ -74,7 +74,7 @@ def load_data(filepath, sep=','):
 
 
 # ✅ Caminho do arquivo (CSV ou XLSX)
-caminho_arquivo = r"BASERESGATE.csv"  # Altere o caminho aqui
+caminho_arquivo = r"BASERESGATE.xlsx"  # Altere o caminho aqui
 
 # ============================
 # 🔹 EXECUÇÃO
