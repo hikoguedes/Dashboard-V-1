@@ -235,8 +235,8 @@ if pagina == 'HOME':
 
         # _________________________________________________________________________________________#
 
-        # Filtrar os valores válidos de "Latência de compra" (remover valores nulos ou inválidos)
-        latencia_compra = df_filtrado['Latência de compra'].dropna()
+        # Filtrar os valores válidos de "Latencia de compra" (remover valores nulos ou inválidos)
+        latencia_compra = df_filtrado['Latencia de compra'].dropna()
 
         # Calcular a média e arredondar
         media_latencia_compra = latencia_compra.mean()
@@ -247,8 +247,8 @@ if pagina == 'HOME':
         # Criar o histograma
         fig, ax = plt.subplots(figsize=(6, 4))  # Tamanho do gráfico ajustado
         plt.hist(latencia_compra, bins=30, color='blue', edgecolor='black')
-        plt.title('Distribuição da Latência de Compra')
-        plt.xlabel('Latência de Compra (dias)')
+        plt.title('Distribuição da Latencia de compra')
+        plt.xlabel('Latencia de compra (dias)')
         plt.ylabel('Frequência')
         plt.grid(True)
 
@@ -629,7 +629,7 @@ if pagina == 'HOME':
                 st.markdown(
                     f"""
                         <div class="card">
-                            <span style="color: black; font-size: 20px; font-weight: bold;">📉 Latência de Compra</span>
+                            <span style="color: black; font-size: 20px; font-weight: bold;">📉 Latencia de compra</span>
                             <span style="color: black; font-size: 20px;">{media_latencia_compra_arredondada} Dias</span>
                         </div>
                         """,
@@ -955,12 +955,12 @@ if pagina == 'RANKING':
             ranking_gerente = df_filtrado.groupby('GERENTE').agg({
                 'Valor vendido': 'sum',
                 'PRODUTO': 'count',
-                'Latência de compra': 'mean'
+                'Latencia de compra': 'mean'
             }).reset_index()
 
             ranking_gerente.rename(columns={
                 'PRODUTO': 'Quantidade de Produtos Vendidos',
-                'Latência de compra': 'Média de Latência (Dias)'
+                'Latencia de compra': 'Média de Latência (Dias)'
             }, inplace=True)
 
             ranking_gerente = ranking_gerente.sort_values(
@@ -994,12 +994,12 @@ if pagina == 'RANKING':
             ranking_corretor = df_filtrado.groupby('Corretor 1').agg({
                 'Valor vendido': 'sum',
                 'PRODUTO': 'count',
-                'Latência de compra': 'mean'
+                'Latencia de compra': 'mean'
             }).reset_index()
 
             ranking_corretor.rename(columns={
                 'PRODUTO': 'Quantidade de Produtos Vendidos',
-                'Latência de compra': 'Média de Latência (Dias)'
+                'Latencia de compra': 'Média de Latência (Dias)'
             }, inplace=True)
 
             ranking_corretor = ranking_corretor.sort_values(
