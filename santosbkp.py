@@ -228,14 +228,33 @@ if pagina == 'HOME':
 # Fazendo a soma
         total_valor_vendido_sem_cancelado = df_filtrado_sem_cancelado['Valor vendido'].sum(
         )
+#________________________________________________________________________________________________________#
+        
+  
 
-        # Calculando o total da coluna "Desconto Financeiro" sem os "CANCELADO"
-        total_desconto_financeiro_sem_cancelado = df_filtrado_sem_cancelado['Desconto Financeiro'].sum(skipna=True)
+# Converter a coluna para numérico, tratando valores inválidos
+        df_filtrado_sem_cancelado['Desconto Financeiro'] = pd.to_numeric(
+                    df_filtrado_sem_cancelado['Desconto Financeiro'], errors='coerce'
+                )
+
+# Remover valores nulos
+        df_filtrado_sem_cancelado.dropna(subset=['Desconto Financeiro'], inplace=True)
+
+# Filtrar apenas valores positivos
+        descontos_positivos = df_filtrado_sem_cancelado[df_filtrado_sem_cancelado['Desconto Financeiro'] > 0]
+
+# Somar apenas os valores positivos
+        total_desconto_positivo = descontos_positivos['Desconto Financeiro'].sum()
+
+# Exibir o resultado
+
+
+#_________________________________________________________________________________________________________        
 
 
         # Calculando o valor final descontando o "Desconto Financeiro"
-        valor_final = total_valor_vendido_sem_cancelado - \
-            total_desconto_financeiro_sem_cancelado
+        valor_final = total_valor_vendido_sem_cancelado - \ 
+        total_desconto_positivo
 
         # _________________________________________________________________________________________#
 
