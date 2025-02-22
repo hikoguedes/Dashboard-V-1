@@ -24,65 +24,10 @@ st.set_page_config(layout="wide")
 # Lendo o arquivo XLSX
 
 
-# ============================
-# 🔹 FUNÇÃO PARA CARREGAR DADOS (CSV ou XLSX)
-# ============================
+# Substitua 'seu_arquivo.parquet' pelo caminho do seu arquivo .parquet
+df = pd.read_parquet('CONSULTA_VENDAS.parquet')
 
-def load_data(filepath, sep=';'):
-    """
-    Função para carregar arquivos CSV ou XLSX com tratamento de erros.
-    """
-    try:
-        # Verifica a extensão do arquivo
-        file_extension = os.path.splitext(filepath)[1].lower()
-
-        if file_extension == '.csv':
-            # ✅ Lê o arquivo CSV
-            df = pd.read_csv(filepath, encoding='ISO-8859-1',
-                             sep=sep, quoting=csv.QUOTE_NONE, on_bad_lines='skip')
-            st.success("✅ Arquivo CSV lido com sucesso usando ISO-8859-1")
-
-        elif file_extension in ['.xlsx', '.xls']:
-            # ✅ Lê o arquivo Excel
-            # Use 'openpyxl' para arquivos xlsx
-            df = pd.read_excel(filepath, engine='openpyxl')
-            st.success("✅ Arquivo Excel lido com sucesso")
-
-        else:
-            st.error("🚫 Formato de arquivo não suportado. Use .csv ou .xlsx")
-            return pd.DataFrame()
-
-        st.success("✅ Selecione uma Data para começar a análise")
-        return df
-
-    except UnicodeDecodeError:
-        # Caso falhe com CSV em ISO-8859-1, tenta com latin1
-        st.warning("⚠️ Erro com ISO-8859-1. Tentando com 'latin1'...")
-        df = pd.read_csv(filepath, encoding='latin1', sep=sep,
-                         quoting=csv.QUOTE_NONE, on_bad_lines='skip')
-        st.success("✅ Arquivo lido com sucesso usando latin1")
-        return df
-
-    except pd.errors.ParserError as e:
-        st.error(f"🚫 Erro ao ler o CSV: {e}")
-        return pd.DataFrame()
-
-    except Exception as e:
-        st.error(f"🚫 Erro inesperado: {e}")
-        return pd.DataFrame()
-
-# ============================
-# 🔹 CAMINHO LOCAL OU LINK
-# ============================
-
-
-# ✅ Caminho do arquivo (CSV ou XLSX)
-caminho_arquivo = r"claro_HG_VENDAS_PY.csv"  # Altere o caminho aqui
-
-# ============================
-# 🔹 EXECUÇÃO
-# ============================
-df = load_data(caminho_arquivo)
+# Exibe as primeiras linhas do DataFrame para verificar se os dados foram lidos corretamente
 
 # ============================
 # 🔹 EXIBIR O DATAFRAME
