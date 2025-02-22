@@ -393,12 +393,12 @@ if pagina == 'HOME':
 
             # _____________________________________________________________________________________#
 
-            # Converter a coluna 'Nº de FU' para numérico no DataFrame filtrado
-        df_filtrado['Nº de FU'] = pd.to_numeric(
-            df_filtrado['Nº de FU'], errors='coerce')
+            # Converter a coluna 'N de FU' para numérico no DataFrame filtrado
+        df_filtrado['N de FU'] = pd.to_numeric(
+            df_filtrado['N de FU'], errors='coerce')
 
         # Calcular o total de Follow-ups (ignorando valores nulos)
-        total_follow_ups = df_filtrado['Nº de FU'].sum()
+        total_follow_ups = df_filtrado['N de FU'].sum()
 
         # Remover casas decimais usando int()
         total_follow_ups = int(total_follow_ups)
@@ -407,7 +407,7 @@ if pagina == 'HOME':
 
         # _____________________________________________________________________________________#
 
-        # Converter a coluna 'Nº de FU' para numérico no DataFrame filtrado
+        # Converter a coluna 'N de FU' para numérico no DataFrame filtrado
         df_filtrado['% De Entrada'] = pd.to_numeric(
             df_filtrado['% De Entrada'], errors='coerce')
 
