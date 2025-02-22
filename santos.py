@@ -1007,8 +1007,19 @@ if pagina == 'RANKING':
                 'Latência de compra': 'Média de Latência (Dias)'
             }, inplace=True)
 
+            # Removendo espaços extras nos nomes das colunas
+            ranking_corretor.columns = ranking_corretor.columns.str.strip()
+
+# Convertendo para float e lidando com NaN
+            ranking_corretor['Valor vendido'] = pd.to_numeric(
+                ranking_corretor['Valor vendido'], errors='coerce').fillna(0)
+
+# Ordenando corretamente
             ranking_corretor = ranking_corretor.sort_values(
                 'Valor vendido', ascending=False)
+
+# Exibindo as primeiras linhas para verificação
+
             st.dataframe(ranking_corretor)
 
             # Gráfico para CORRETOR 1
