@@ -230,8 +230,8 @@ if pagina == 'HOME':
         )
 
         # Calculando o total da coluna "Desconto Financeiro" sem os "CANCELADO"
-        total_desconto_financeiro_sem_cancelado = df_filtrado_sem_cancelado['Desconto Financeiro'].sum(
-        )
+        total_desconto_financeiro_sem_cancelado = df_filtrado_sem_cancelado['Desconto Financeiro'].sum(skipna=True)
+
 
         # Calculando o valor final descontando o "Desconto Financeiro"
         valor_final = total_valor_vendido_sem_cancelado - \
