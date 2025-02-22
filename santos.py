@@ -359,211 +359,211 @@ if pagina == 'HOME':
             else:
                 return '<span style="color:gray; font-size:25px;">➡️</span>'  # Estabilidade
 
-            total_por_mes['Seta'] = total_por_mes['Variação (%)'].apply(
-                definir_seta_colorida)
+        total_por_mes['Seta'] = total_por_mes['Variação (%)'].apply(
+            definir_seta_colorida)
 
-            # 6️⃣ Converter o número do mês para nome
-            total_por_mes['Mês Nome'] = total_por_mes['Mês'].apply(
-                lambda x: pd.to_datetime(str(x), format='%m').strftime('%B'))
+        # 6️⃣ Converter o número do mês para nome
+        total_por_mes['Mês Nome'] = total_por_mes['Mês'].apply(
+            lambda x: pd.to_datetime(str(x), format='%m').strftime('%B'))
 
-            # 7️⃣ Valores para o Cartão
-            valor_final = df_filtrado['Valor vendido'].sum()  # VGV Bruto
-            quant_assinado = df_filtrado.shape[0]  # Total de assinados
+        # 7️⃣ Valores para o Cartão
+        valor_final = df_filtrado['Valor vendido'].sum()  # VGV Bruto
+        quant_assinado = df_filtrado.shape[0]  # Total de assinados
 
-            # Últimos dados para o cartão
-            if not total_por_mes.empty:
-                ultima_variacao = total_por_mes.iloc[-1]['Seta']
-                ultimo_valor = total_por_mes.iloc[-1]['Valor vendido']
-                ultimo_ano = total_por_mes.iloc[-1]['Ano']
-                ultimo_mes = total_por_mes.iloc[-1]['Mês Nome']
-            else:
-                # Valores padrão em caso de DataFrame vazio
-                ultima_variacao = '➡️'
-                ultimo_valor = 0
-                ultimo_ano = 'Sem Dados'
-                ultimo_mes = 'Sem Dados'
+        # Últimos dados para o cartão
+        if not total_por_mes.empty:
+            ultima_variacao = total_por_mes.iloc[-1]['Seta']
+            ultimo_valor = total_por_mes.iloc[-1]['Valor vendido']
+            ultimo_ano = total_por_mes.iloc[-1]['Ano']
+            ultimo_mes = total_por_mes.iloc[-1]['Mês Nome']
+        else:
+            # Valores padrão em caso de DataFrame vazio
+            ultima_variacao = '➡️'
+            ultimo_valor = 0
+            ultimo_ano = 'Sem Dados'
+            ultimo_mes = 'Sem Dados'
 
             # ____
             # _____________________________________________________________________________________#
 
             # Converter colunas para numérico e tratar valores ausentes no DataFrame filtrado
-            df_filtrado['Valor vendido'] = pd.to_numeric(
-                df_filtrado['Valor vendido'], errors='coerce')
-            df_filtrado['# Clientes'] = pd.to_numeric(
-                df_filtrado['# Clientes'], errors='coerce')
+        df_filtrado['Valor vendido'] = pd.to_numeric(
+            df_filtrado['Valor vendido'], errors='coerce')
+        df_filtrado['# Clientes'] = pd.to_numeric(
+            df_filtrado['# Clientes'], errors='coerce')
 
-            # Calcular o Ticket Médio usando o DataFrame filtrado
-            total_valor_vendido_filtrado = df_filtrado['Valor vendido'].sum()
-            total_clientes_filtrado = df_filtrado['# Clientes'].sum()
+        # Calcular o Ticket Médio usando o DataFrame filtrado
+        total_valor_vendido_filtrado = df_filtrado['Valor vendido'].sum()
+        total_clientes_filtrado = df_filtrado['# Clientes'].sum()
 
-            # Evitar divisão por zero
-            if total_clientes_filtrado != 0:
-                ticket_medio_filtrado = total_valor_vendido_filtrado / total_clientes_filtrado
-            else:
-                ticket_medio_filtrado = 0
-
-            # _____________________________________________________________________________________#
-
-            # Converter a coluna 'Nº de FU' para numérico no DataFrame filtrado
-            df_filtrado['Nº de FU'] = pd.to_numeric(
-                df_filtrado['Nº de FU'], errors='coerce')
-
-            # Calcular o total de Follow-ups (ignorando valores nulos)
-            total_follow_ups = df_filtrado['Nº de FU'].sum()
-
-            # Remover casas decimais usando int()
-            total_follow_ups = int(total_follow_ups)
-
-            # _____________________________________________________________________________________#
+        # Evitar divisão por zero
+        if total_clientes_filtrado != 0:
+            ticket_medio_filtrado = total_valor_vendido_filtrado / total_clientes_filtrado
+        else:
+            ticket_medio_filtrado = 0
 
             # _____________________________________________________________________________________#
 
             # Converter a coluna 'Nº de FU' para numérico no DataFrame filtrado
-            df_filtrado['% De Entrada'] = pd.to_numeric(
-                df_filtrado['% De Entrada'], errors='coerce')
+        df_filtrado['Nº de FU'] = pd.to_numeric(
+            df_filtrado['Nº de FU'], errors='coerce')
 
-            # Calcular o total de Follow-ups (ignorando valores nulos)
-            total_entrada = df_filtrado['% De Entrada'].sum()
+        # Calcular o total de Follow-ups (ignorando valores nulos)
+        total_follow_ups = df_filtrado['Nº de FU'].sum()
 
-            # Remover casas decimais usando int()
-            total_entrada = int(total_entrada)
+        # Remover casas decimais usando int()
+        total_follow_ups = int(total_follow_ups)
 
-            percent_entrada = round((total_entrada / total_valor_vendido_sem_cancelado)
-                                    * 100) if total_valor_vendido_sem_cancelado != 0 else 0
+        # _____________________________________________________________________________________#
 
-            # _____________________________________________________________________________________#
-            # _________________________________________________________________________________________#
+        # _____________________________________________________________________________________#
 
-            df_integral = df_filtrado[df_filtrado['Tipo unidade semanas'] == 'Integral']
-            # Contando a quantidade de "ASSINADO" na coluna 'Status 1'
-            quant_integral = df_integral.shape[0]
+        # Converter a coluna 'Nº de FU' para numérico no DataFrame filtrado
+        df_filtrado['% De Entrada'] = pd.to_numeric(
+            df_filtrado['% De Entrada'], errors='coerce')
 
-            # Calculando o total de registros no DataFrame original
-            total_registros = df_filtrado.shape[0]
+        # Calcular o total de Follow-ups (ignorando valores nulos)
+        total_entrada = df_filtrado['% De Entrada'].sum()
 
-            # Calculando o percentual de registros "A vista" em relação ao total
-            # percent_a_vista = round((quant_a_vista / total_registros) * 100)
-            percent_integral = round(
-                (quant_integral / total_registros) * 100) if total_registros != 0 else 0
+        # Remover casas decimais usando int()
+        total_entrada = int(total_entrada)
 
-            # _________________________________________________________________________________________#
+        percent_entrada = round((total_entrada / total_valor_vendido_sem_cancelado)
+                                * 100) if total_valor_vendido_sem_cancelado != 0 else 0
 
-            # Normalizando os dados para garantir que o filtro funcione
-            df_filtrado['Tipo unidade semanas'] = df_filtrado['Tipo unidade semanas'].astype(
-                str).str.strip()
+        # _____________________________________________________________________________________#
+        # _________________________________________________________________________________________#
 
-            # Agora filtra
-            df_4_semanas = df_filtrado[df_filtrado['Tipo unidade semanas'] == '4']
-            quant_4_semanas = df_4_semanas.shape[0]
-            total_registros = df_filtrado.shape[0]
-            percent_4_semanas = round(
-                (quant_4_semanas / total_registros) * 100) if total_registros != 0 else 0
+        df_integral = df_filtrado[df_filtrado['Tipo unidade semanas'] == 'Integral']
+        # Contando a quantidade de "ASSINADO" na coluna 'Status 1'
+        quant_integral = df_integral.shape[0]
 
-            # _________________________________________________________________________________________#
+        # Calculando o total de registros no DataFrame original
+        total_registros = df_filtrado.shape[0]
 
-            # _________________________________________________________________________________________#
+        # Calculando o percentual de registros "A vista" em relação ao total
+        # percent_a_vista = round((quant_a_vista / total_registros) * 100)
+        percent_integral = round(
+            (quant_integral / total_registros) * 100) if total_registros != 0 else 0
 
-            # Normalizando os dados para garantir que o filtro funcione
-            df_filtrado['Tipo unidade semanas'] = df_filtrado['Tipo unidade semanas'].astype(
-                str).str.strip()
+        # _________________________________________________________________________________________#
 
-            # Agora filtra
-            df_6_semanas = df_filtrado[df_filtrado['Tipo unidade semanas'] == '6']
-            quant_6_semanas = df_6_semanas.shape[0]
-            total_registros = df_filtrado.shape[0]
-            percent_6_semanas = round(
-                (quant_6_semanas / total_registros) * 100) if total_registros != 0 else 0
+        # Normalizando os dados para garantir que o filtro funcione
+        df_filtrado['Tipo unidade semanas'] = df_filtrado['Tipo unidade semanas'].astype(
+            str).str.strip()
 
-            # _________________________________________________________________________________________#
+        # Agora filtra
+        df_4_semanas = df_filtrado[df_filtrado['Tipo unidade semanas'] == '4']
+        quant_4_semanas = df_4_semanas.shape[0]
+        total_registros = df_filtrado.shape[0]
+        percent_4_semanas = round(
+            (quant_4_semanas / total_registros) * 100) if total_registros != 0 else 0
 
-            # _________________________________________________________________________________________#
+        # _________________________________________________________________________________________#
 
-            # Normalizando os dados para garantir que o filtro funcione
-            df_filtrado['Tipo unidade semanas'] = df_filtrado['Tipo unidade semanas'].astype(
-                str).str.strip()
+        # _________________________________________________________________________________________#
 
-            # Agora filtra
-            df_13_semanas = df_filtrado[df_filtrado['Tipo unidade semanas'] == '13']
-            quant_13_semanas = df_13_semanas.shape[0]
-            total_registros = df_filtrado.shape[0]
-            percent_13_semanas = round(
-                (quant_13_semanas / total_registros) * 100) if total_registros != 0 else 0
+        # Normalizando os dados para garantir que o filtro funcione
+        df_filtrado['Tipo unidade semanas'] = df_filtrado['Tipo unidade semanas'].astype(
+            str).str.strip()
 
-            # _________________________________________________________________________________________#
-            # _____________________________________________________________________________________#
+        # Agora filtra
+        df_6_semanas = df_filtrado[df_filtrado['Tipo unidade semanas'] == '6']
+        quant_6_semanas = df_6_semanas.shape[0]
+        total_registros = df_filtrado.shape[0]
+        percent_6_semanas = round(
+            (quant_6_semanas / total_registros) * 100) if total_registros != 0 else 0
 
-            # Converter a coluna 'Desconto Financeiro' para numérico no DataFrame filtrado
-            df_filtrado['Desconto Financeiro'] = pd.to_numeric(
-                df_filtrado['Desconto Financeiro'], errors='coerce')
+        # _________________________________________________________________________________________#
 
-            # Calcular o total de Desconto Financeiro (ignorando valores nulos)
-            total_desconto_financeiro = df_filtrado['Desconto Financeiro'].sum(
-            )
+        # _________________________________________________________________________________________#
 
-            # Calcular o percentual sobre o total vendido (em %)
-            percent_desconto_financeiro = round(
-                (total_desconto_financeiro / total_valor_vendido_sem_cancelado) * 100) if total_valor_vendido_sem_cancelado != 0 else 0
+        # Normalizando os dados para garantir que o filtro funcione
+        df_filtrado['Tipo unidade semanas'] = df_filtrado['Tipo unidade semanas'].astype(
+            str).str.strip()
 
-            # Formatar o valor em reais (usando substituição para vírgula e ponto)
-            total_desconto_financeiro_formatado = "R$ {:,.2f}".format(
-                total_desconto_financeiro).replace(",", "X").replace(".", ",").replace("X", ".")
+        # Agora filtra
+        df_13_semanas = df_filtrado[df_filtrado['Tipo unidade semanas'] == '13']
+        quant_13_semanas = df_13_semanas.shape[0]
+        total_registros = df_filtrado.shape[0]
+        percent_13_semanas = round(
+            (quant_13_semanas / total_registros) * 100) if total_registros != 0 else 0
 
-            # _____________________________________________________________________________________#
-            # ______#_____________________________________________________________________________________#
+        # _________________________________________________________________________________________#
+        # _____________________________________________________________________________________#
 
-            # Converter a coluna 'Desconto Financeiro' para numérico no DataFrame filtrado
-            df_filtrado['Desconto Real Viabilidade'] = pd.to_numeric(
-                df_filtrado['Desconto Real Viabilidade'], errors='coerce')
+        # Converter a coluna 'Desconto Financeiro' para numérico no DataFrame filtrado
+        df_filtrado['Desconto Financeiro'] = pd.to_numeric(
+            df_filtrado['Desconto Financeiro'], errors='coerce')
 
-            # Calcular o total de Desconto Financeiro (ignorando valores nulos)
-            total_desconto_viabilidade = df_filtrado['Desconto Real Viabilidade'].sum(
-            )
+        # Calcular o total de Desconto Financeiro (ignorando valores nulos)
+        total_desconto_financeiro = df_filtrado['Desconto Financeiro'].sum(
+        )
 
-            # Calcular o percentual sobre o total vendido (em %)
-            percent_desconto_viabilidade = round(
-                (total_desconto_viabilidade / total_valor_vendido_sem_cancelado) * 100) if total_valor_vendido_sem_cancelado != 0 else 0
+        # Calcular o percentual sobre o total vendido (em %)
+        percent_desconto_financeiro = round(
+            (total_desconto_financeiro / total_valor_vendido_sem_cancelado) * 100) if total_valor_vendido_sem_cancelado != 0 else 0
 
-            # Formatar o valor em reais (usando substituição para vírgula e ponto)
-            total_desconto_viabilidade_formatado = "R$ {:,.2f}".format(
-                total_desconto_viabilidade).replace(",", "X").replace(".", ",").replace("X", ".")
+        # Formatar o valor em reais (usando substituição para vírgula e ponto)
+        total_desconto_financeiro_formatado = "R$ {:,.2f}".format(
+            total_desconto_financeiro).replace(",", "X").replace(".", ",").replace("X", ".")
 
-            # _____________________________________________________________________________________#
-            # Converter a coluna 'Desconto Financeiro' para numérico no DataFrame filtrado
-            df_filtrado['Ganho Viabilidade R$ '] = pd.to_numeric(
-                df_filtrado['Ganho Viabilidade R$ '], errors='coerce')
+        # _____________________________________________________________________________________#
+        # ______#_____________________________________________________________________________________#
 
-            # Calcular o total de Desconto Financeiro (ignorando valores nulos)
-            total_ganho_viabilidade = df_filtrado['Ganho Viabilidade R$ '].sum(
-            )
+        # Converter a coluna 'Desconto Financeiro' para numérico no DataFrame filtrado
+        df_filtrado['Desconto Real Viabilidade'] = pd.to_numeric(
+            df_filtrado['Desconto Real Viabilidade'], errors='coerce')
 
-            # Calcular o percentual sobre o total vendido (em %)
-            percent_ganho_viabilidade = round(
-                (total_ganho_viabilidade / total_valor_vendido_sem_cancelado) * 100) if total_valor_vendido_sem_cancelado != 0 else 0
+        # Calcular o total de Desconto Financeiro (ignorando valores nulos)
+        total_desconto_viabilidade = df_filtrado['Desconto Real Viabilidade'].sum(
+        )
 
-            # Formatar o valor em reais (usando substituição para vírgula e ponto)
-            total_ganho_viabilidade_formatado = "R$ {:,.2f}".format(
-                total_ganho_viabilidade).replace(",", "X").replace(".", ",").replace("X", ".")
+        # Calcular o percentual sobre o total vendido (em %)
+        percent_desconto_viabilidade = round(
+            (total_desconto_viabilidade / total_valor_vendido_sem_cancelado) * 100) if total_valor_vendido_sem_cancelado != 0 else 0
 
-            # _____________________________________________________________________________________#
+        # Formatar o valor em reais (usando substituição para vírgula e ponto)
+        total_desconto_viabilidade_formatado = "R$ {:,.2f}".format(
+            total_desconto_viabilidade).replace(",", "X").replace(".", ",").replace("X", ".")
 
-            # _____________________________________________________________________________________#
+        # _____________________________________________________________________________________#
+        # Converter a coluna 'Desconto Financeiro' para numérico no DataFrame filtrado
+        df_filtrado['Ganho Viabilidade R$ '] = pd.to_numeric(
+            df_filtrado['Ganho Viabilidade R$ '], errors='coerce')
 
-            # _____________________________________________________________________________________#
+        # Calcular o total de Desconto Financeiro (ignorando valores nulos)
+        total_ganho_viabilidade = df_filtrado['Ganho Viabilidade R$ '].sum(
+        )
 
-            # Agrupando por 'CLIENTES' e contando a quantidade de registros para cada cliente
-            # clientes_agrupados = df.groupby('CLIENTE').size().reset_index(name='Total')
-            # Agrupando por 'CLIENTES' e contando a quantidade de registros para cada cliente
-            # Contando o número de clientes distintos
-            # Agora o total_clientes irá variar com os filtros aplicados
-            # Contando os clientes únicos no df_filtrado
-            total_clientes = df_filtrado['CLIENTE'].nunique()
+        # Calcular o percentual sobre o total vendido (em %)
+        percent_ganho_viabilidade = round(
+            (total_ganho_viabilidade / total_valor_vendido_sem_cancelado) * 100) if total_valor_vendido_sem_cancelado != 0 else 0
 
-            ###################################################################################################
-            ####################################################################################################
+        # Formatar o valor em reais (usando substituição para vírgula e ponto)
+        total_ganho_viabilidade_formatado = "R$ {:,.2f}".format(
+            total_ganho_viabilidade).replace(",", "X").replace(".", ",").replace("X", ".")
 
-            # CSS para padronizar o tamanho dos cartões
-            st.markdown(
-                """
+        # _____________________________________________________________________________________#
+
+        # _____________________________________________________________________________________#
+
+        # _____________________________________________________________________________________#
+
+        # Agrupando por 'CLIENTES' e contando a quantidade de registros para cada cliente
+        # clientes_agrupados = df.groupby('CLIENTE').size().reset_index(name='Total')
+        # Agrupando por 'CLIENTES' e contando a quantidade de registros para cada cliente
+        # Contando o número de clientes distintos
+        # Agora o total_clientes irá variar com os filtros aplicados
+        # Contando os clientes únicos no df_filtrado
+        total_clientes = df_filtrado['CLIENTE'].nunique()
+
+        ###################################################################################################
+        ####################################################################################################
+
+        # CSS para padronizar o tamanho dos cartões
+        st.markdown(
+            """
                 <style>
                 .card {
                     background-color: #00FFFF;
@@ -584,25 +584,25 @@ if pagina == 'HOME':
 
                 </style>
                 """,
-                unsafe_allow_html=True
-            )
+            unsafe_allow_html=True
+        )
 
-            # Verificando se o df_filtrado está vazio após os filtros
-            if df_filtrado.empty:
-                st.markdown(f"""
+        # Verificando se o df_filtrado está vazio após os filtros
+        if df_filtrado.empty:
+            st.markdown(f"""
                 <div class="card" style="background-color:#BDBDBD;">
                     <span style="color: black; font-size: 15px; font-weight: bold;">Sem Dados para Amostra</span>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
-                # Primeira linha de cartões
-                st.write("")  # Linha em branco cria espaço
-                # Criando as colunas para os cartões
-                col1, col2, col3, col4, col5 = st.columns(5)
+        else:
+            # Primeira linha de cartões
+            st.write("")  # Linha em branco cria espaço
+            # Criando as colunas para os cartões
+            col1, col2, col3, col4, col5 = st.columns(5)
 
-                with col1:
-                    st.markdown(
-                        f"""
+            with col1:
+                st.markdown(
+                    f"""
                         <div class="card">
                             <span style="color: black; font-size: 20px; font-weight: bold;">💰 VGV Bruto</span>
                             <span style="color: black; font-size: 15px;">R$ {total_valor_vendido_sem_cancelado:,.2f}</span>
@@ -612,315 +612,315 @@ if pagina == 'HOME':
                             <span style="color: black; font-size: 25px;">{ultima_variacao}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col2:
-                    st.markdown(
-                        f"""
+            with col2:
+                st.markdown(
+                    f"""
                         <div class="card" style="background-color:#FFDDC1;">
                             <span style="color: black; font-size: 20px; font-weight: bold;">Total Bruto</span>
                             <span style="color: black; font-size: 15px;">R$ {valor_final:,.2f}</span>
                             <span style="color: black; font-size: 15px;">Total Não Assinados: {quant_nao_assinado}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col3:
-                    st.markdown(
-                        f"""
+            with col3:
+                st.markdown(
+                    f"""
                         <div class="card" style="background-color:#FFDDC1;">
                             <span style="color: black; font-size: 20px; font-weight: bold;"> 👥Quantidade Clientes</span>
                             <span style="color: black; font-size: 25px;">{total_clientes}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col4:
-                    st.markdown(
-                        f"""
+            with col4:
+                st.markdown(
+                    f"""
                         <div class="card">
                             <span style="color: black; font-size: 20px; font-weight: bold;">📉 Latência de Compra</span>
                             <span style="color: black; font-size: 20px;">{media_latencia_compra_arredondada} Dias</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col5:
-                    st.markdown(
-                        f"""
+            with col5:
+                st.markdown(
+                    f"""
                         <div class="card">
                             <span style="color: black; font-size: 15px; font-weight: bold;">TABELA A VISTA (4M)</span>
                             <span style="color: black; font-size: 20px;">{quant_a_vista}</span>
                             <span style="color: black; font-size: 25px;">{percent_a_vista}%</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
             # 👉 Espaço entre as linhas
-                st.write("")  # Linha em branco cria espaço
-                # Segunda linha de cartões
-                col1, col2, col3, col4, col5 = st.columns(5)
+            st.write("")  # Linha em branco cria espaço
+            # Segunda linha de cartões
+            col1, col2, col3, col4, col5 = st.columns(5)
 
-                with col1:
-                    st.markdown(
-                        f"""
+            with col1:
+                st.markdown(
+                    f"""
                         <div class="card" style="background-color:#2196F3;">
                             <span style="color: white; font-size: 20px; font-weight: bold;">VGV TOTAL LÍQUIDO</span>
                             <span style="color: white; font-size: 15px;">R$ {valor_final:,.2f}</span>
                             <span style="color: white; font-size: 15px;">Total Assinados: {quant_assinado}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col2:
-                    st.markdown(
-                        f"""
+            with col2:
+                st.markdown(
+                    f"""
                         <div class="card">
                             <span style="color: black; font-size: 20px; font-weight: bold;">VGV Bruto</span>
                             <span style="color: black; font-size: 15px;">R$ {valor_final:,.2f}</span>
                             <span style="color: black; font-size: 15px;">Total Assinados: {quant_assinado}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col3:
-                    st.markdown(
-                        f"""
+            with col3:
+                st.markdown(
+                    f"""
                         <div class="card" style="background-color:#FFDDC1;">
                             <span style="color: black; font-size: 20px; font-weight: bold;">Ticket Médio</span>
                             <span style="color: black; font-size: 15px;">R$ {ticket_medio_filtrado:,.2f}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col4:
-                    st.markdown(
-                        f"""
+            with col4:
+                st.markdown(
+                    f"""
                         <div class="card" style="background-color:#FFDDC1;">
                             <span style="color: black; font-size: 20px; font-weight: bold;">Follow-ups</span>
                             <span style="color: black; font-size: 25px;">{total_follow_ups}</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col5:
-                    st.markdown(
-                        f"""
+            with col5:
+                st.markdown(
+                    f"""
                         <div class="card">
                             <span style="color: black; font-size: 15px; font-weight: bold;">TABELA CURTA (35M)</span>
                             <span style="color: black; font-size: 20px;">{quant_curta}</span>
                             <span style="color: black; font-size: 25px;">{percent_curta}%</span>
                         </div>
                         """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
             # Verificando se o df_filtrado está vazio após os filtros
-            if df_filtrado.empty:
-                st.markdown(f"""
+        if df_filtrado.empty:
+            st.markdown(f"""
                 <div class="card" style="background-color:#BDBDBD;">
                     <span style="color: black; font-size: 15px; font-weight: bold;">Sem Dados para Amostra</span>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
+        else:
 
-                # 👉 Espaço entre as linhas
-                st.write("")  # Linha em branco cria espaço
+            # 👉 Espaço entre as linhas
+            st.write("")  # Linha em branco cria espaço
 
-                # Definindo as colunas com larguras específicas
-                # O primeiro cartão ocupa o espaço de 2 cartões
-                col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
+            # Definindo as colunas com larguras específicas
+            # O primeiro cartão ocupa o espaço de 2 cartões
+            col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
 
-                with col26:
-                    st.markdown(
-                        f"""
+            with col26:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#4CAF50;">
                         <span style="color: white; font-size: 20px; font-weight: bold;">📊 DESCONTOS FINANCEIROS</span><br>
                         <span style="color: white; font-size: 30px;">R$ {total_desconto_financeiro}</span><br>
                         <span style="color: white; font-size: 30px;">{percent_desconto_financeiro}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col27:
-                    st.markdown(
-                        f"""
+            with col27:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FF9800;">
                             <span style="color: black; font-size: 20px; font-weight: bold;">📆INTEGRAL</span>
                             <span style="color: black; font-size: 25px;">{quant_integral}</span>
                             <span style="color: black; font-size: 25px;">{percent_integral}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col28:
-                    st.markdown(
-                        f"""
+            with col28:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FFDDC1;">
                             <span style="color: black; font-size: 20px; font-weight: bold;">4 SEMANAS</span>
                         <span style="color: black; font-size: 25px;">{quant_4_semanas}</span>
                         <span style="color: black; font-size: 20px;">{percent_4_semanas}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                    with col29:
-                        st.markdown(
-                            f"""
+                with col29:
+                    st.markdown(
+                        f"""
                     <div class="card" style="background-color:#03A9F4;">
             <span style="color: white; font-size: 15px; font-weight: bold;">TABELA LONGA (60M)</span>
                             <span style="color: white; font-size: 20px;">{quant_longa}</span>
                             <span style="color: white; font-size: 25px;">{percent_longa}%</span>
                     </div>
                     """,
-                            unsafe_allow_html=True
-                        )
+                        unsafe_allow_html=True
+                    )
             # Verificando se o df_filtrado está vazio após os filtros
-            if df_filtrado.empty:
-                st.markdown(f"""
+        if df_filtrado.empty:
+            st.markdown(f"""
                 <div class="card" style="background-color:#BDBDBD;">
                     <span style="color: black; font-size: 15px; font-weight: bold;">Sem Dados para Amostra</span>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
+        else:
 
-                # 👉 Espaço entre as linhas
-                st.write("")  # Linha em branco cria espaço
+            # 👉 Espaço entre as linhas
+            st.write("")  # Linha em branco cria espaço
 
-                # Definindo as colunas com larguras específicas
-                # O primeiro cartão ocupa o espaço de 2 cartões
-                col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
+            # Definindo as colunas com larguras específicas
+            # O primeiro cartão ocupa o espaço de 2 cartões
+            col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
 
-                with col26:
-                    st.markdown(
-                        f"""
+            with col26:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#4CAF50;">
                         <span style="color: white; font-size: 20px; font-weight: bold;">📊 DESCONTO REAL VIABILIDADE</span>
                         <span style="color: white; font-size: 30px;">R$ {total_desconto_viabilidade}</span>
                         <span style="color: white; font-size: 30px;">{percent_desconto_viabilidade}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col27:
-                    st.markdown(
-                        f"""
+            with col27:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FF9800;">
                         <span style="color: black; font-size: 20px; font-weight: bold;">📆 4 SEMANAS</span>
                         <span style="color: black; font-size: 25px;">{quant_4_semanas}</span>
                         <span style="color: black; font-size: 20px;">{percent_4_semanas}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col28:
-                    st.markdown(
-                        f"""
+            with col28:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FFDDC1;">
                         <span style="color: black; font-size: 20px; font-weight: bold;">📆 4 SEMANAS</span>
                         <span style="color: black; font-size: 25px;">{quant_4_semanas}</span>
                         <span style="color: black; font-size: 20px;">{percent_4_semanas}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                    with col29:
-                        st.markdown(
-                            f"""
+                with col29:
+                    st.markdown(
+                        f"""
                     <div class="card" style="background-color:#03A9F4;">
                             <span style="color: white; font-size: 15px; font-weight: bold;">TABELA LONG+ (>60M)</span>
                             <span style="color: white; font-size: 20px;">{quant_longuissima}</span>
                             <span style="color: white; font-size: 25px;">{percent_longuissima}%</span>
                     </div>
                     """,
-                            unsafe_allow_html=True
-                        )
+                        unsafe_allow_html=True
+                    )
 
             # Verificando se o df_filtrado está vazio após os filtros
-            if df_filtrado.empty:
-                st.markdown(f"""
+        if df_filtrado.empty:
+            st.markdown(f"""
                 <div class="card" style="background-color:#BDBDBD;">
                     <span style="color: black; font-size: 15px; font-weight: bold;">Sem Dados para Amostra</span>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
+        else:
 
-                # 👉 Espaço entre as linhas
-                st.write("")  # Linha em branco cria espaço
+            # 👉 Espaço entre as linhas
+            st.write("")  # Linha em branco cria espaço
 
-                # Definindo as colunas com larguras específicas
-                # O primeiro cartão ocupa o espaço de 2 cartões
-                col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
+            # Definindo as colunas com larguras específicas
+            # O primeiro cartão ocupa o espaço de 2 cartões
+            col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
 
-                with col26:
-                    st.markdown(
-                        f"""
+            with col26:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#4CAF50;">
                         <span style="color: white; font-size: 20px; font-weight: bold;">📊 GANHO VIABILIDADE</span>
                         <span style="color: white; font-size: 30px;">R$ {total_ganho_viabilidade}</span>
                         <span style="color: white; font-size: 30px;">{percent_ganho_viabilidade}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col27:
-                    st.markdown(
-                        f"""
+            with col27:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FF9800;">
                         <span style="color: black; font-size: 20px; font-weight: bold;">📆 6 SEMANAS</span>
                         <span style="color: black; font-size: 25px;">{quant_6_semanas}</span>
                         <span style="color: black; font-size: 20px;">{percent_6_semanas}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col28:
-                    st.markdown(
-                        f"""
+            with col28:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FFDDC1;">
                         <span style="color: black; font-size: 20px; font-weight: bold;">📆 % MÉDIO DE ENTRADA</span>
                         <span style="color: black; font-size: 25px;">{percent_entrada}%</span>
 
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
             # Verificando se o df_filtrado está vazio após os filtros
-            if df_filtrado.empty:
-                st.markdown(f"""
+        if df_filtrado.empty:
+            st.markdown(f"""
                 <div class="card" style="background-color:#BDBDBD;">
                     <span style="color: black; font-size: 15px; font-weight: bold;">Sem Dados para Amostra</span>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
+        else:
 
-                # 👉 Espaço entre as linhas
-                st.write("")  # Linha em branco cria espaço
+            # 👉 Espaço entre as linhas
+            st.write("")  # Linha em branco cria espaço
 
-                # Definindo as colunas com larguras específicas
-                # O primeiro cartão ocupa o espaço de 2 cartões
-                col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
+            # Definindo as colunas com larguras específicas
+            # O primeiro cartão ocupa o espaço de 2 cartões
+            col26, col27, col28, col29 = st.columns([2, 1, 1, 1])
 
-                with col26:
-                    st.markdown(
-                        f"""
+            with col26:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#4CAF50;">
                         <span style="color: white; font-size: 20px; font-weight: bold;">📊 RELATÓRIO COMPLETO</span>
                         <span style="color: white; font-size: 15px;">R$ {valor_final:,.2f}</span>
@@ -928,24 +928,24 @@ if pagina == 'HOME':
                         <span style="color: white; font-size: 15px;">Descontos Aplicados: R$ {total_desconto_financeiro:,.2f}</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
 
-                with col27:
-                    st.markdown(
-                        f"""
+            with col27:
+                st.markdown(
+                    f"""
                     <div class="card" style="background-color:#FF9800;">
                         <span style="color: black; font-size: 20px; font-weight: bold;">📆 13 SEMANAS</span>
                         <span style="color: black; font-size: 25px;">{quant_13_semanas}</span>
                         <span style="color: black; font-size: 20px;">{percent_13_semanas}%</span>
                     </div>
                     """,
-                        unsafe_allow_html=True
-                    )
+                    unsafe_allow_html=True
+                )
             ####################################################### END HOME #######################################################
 
-                # else:
-                    # st.write("Nenhum dado encontrado para os filtros selecionados.")
+    else:
+        st.write("Nenhum dado encontrado para os filtros selecionados.")
 
 
 # PÁGINA RANKING
