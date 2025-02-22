@@ -17,7 +17,7 @@ import altair as alt
 import matplotlib.ticker as mticker
 
 # Definindo o padrão para o Brasil
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 # Configuração do layout
 st.set_page_config(layout="wide")
