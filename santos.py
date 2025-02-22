@@ -10,7 +10,7 @@ import numpy as np
 # from sklearn.linear_model import LinearRegression
 # from sklearn.metrics import mean_squared_error
 # import plotly.express as px
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import plotly.io as pio
 import locale
 import altair as alt
