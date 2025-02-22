@@ -253,8 +253,7 @@ if pagina == 'HOME':
 
 
         # Calculando o valor final descontando o "Desconto Financeiro"
-        valor_final = total_valor_vendido_sem_cancelado - \ 
-        total_desconto_positivo
+        valor_final = total_valor_vendido_sem_cancelado - total_desconto_positivo
 
         # _________________________________________________________________________________________#
 
