@@ -23,11 +23,73 @@ import matplotlib.ticker as mticker
 st.set_page_config(layout="wide")
 # Lendo o arquivo XLSX
 
+import pandas as pd
+import streamlit as st
 
-# Substitua 'seu_arquivo.parquet' pelo caminho do seu arquivo .parquet
-df = pd.read_parquet('CONSULTA_VENDAS.parquet')
+# ============================
+# 🔹 FUNÇÃO PARA CARREGAR O ARQUIVO PARQUET
+# ============================
+def load_parquet(filepath):
+    try:
+        # ✅ Lê o arquivo Parquet
+        df = pd.read_parquet(filepath)
 
-# Exibe as primeiras linhas do DataFrame para verificar se os dados foram lidos corretamente
+        # ✅ Verifica se o DataFrame tem dados
+        if df.empty:
+            st.warning("⚠️ O arquivo foi lido, mas está vazio.")
+        else:
+            st.success("✅ Arquivo Parquet lido com sucesso!")
+
+        return df
+
+    except FileNotFoundError:
+        st.error("🚫 Arquivo não encontrado. Verifique o caminho e tente novamente.")
+        return pd.DataFrame()
+
+    except Exception as e:
+        st.error(f"🚫 Ocorreu um erro ao ler o arquivo: {e}")
+        return pd.DataFrame()
+
+# ============================
+# 🔹 INÍCIO DA APLICAÇÃO STREAMLIT
+# ============================
+
+# 📁 Definindo o caminho do arquivo Parquet
+st.title("📊 Analisador de Dados - Arquivo Parquet")
+
+# ✅ Caminho fixo ou permitir upload
+filepath = 'CONSULTA_VENDAS.parquet'
+
+# ✅ Carregar o DataFrame
+df = load_parquet(filepath)
+
+# ============================
+# 🔹 EXIBIÇÃO E VERIFICAÇÕES
+# ============================
+
+if not df.empty:
+    # ✅ Exibição do resumo dos dados
+    st.subheader("📋 Resumo dos Dados")
+    st.write("**Número de Linhas e Colunas:**", df.shape)
+
+    # ✅ Tipos de dados das colunas
+    st.write("**Colunas e Tipos de Dados:**")
+    st.dataframe(df.dtypes.reset_index().rename(columns={0: "Tipo de Dado", "index": "Coluna"}))
+
+    # ✅ Verificação de valores nulos
+    st.write("**🔍 Verificação de Valores Nulos:**")
+    st.dataframe(df.isnull().sum().reset_index().rename(columns={0: "Valores Nulos", "index": "Coluna"}))
+
+    # ✅ Solicita Data de Início para Análise
+    st.subheader("📅 Selecione uma Data para Iniciar a Análise")
+    data_inicio = st.date_input("Data de Início")
+
+    if data_inicio:
+        st.success(f"✅ Análise iniciada a partir de: {data_inicio}")
+    else:
+        st.warning("⚠️ Por favor, selecione uma data para iniciar sua análise.")
+else:
+    st.error("🚫 Não foi possível carregar o DataFrame.")
 
 # ============================
 # 🔹 EXIBIR O DATAFRAME
@@ -95,9 +157,9 @@ df_filtrado = df[(df['Data da Venda'].dt.date >= data_inicio)
 gerente = st.sidebar.selectbox(
     'GERENTE', ['Todos'] + list(df[' GERENTE'].unique()))
 corretor1 = st.sidebar.selectbox(
-    'Corretor 1', ['Todos'] + list(df['Corretor 1'].unique()))
+    'Corretor 1', ['Todos'] + list(df[' Corretor 1'].unique()))
 corretor2 = st.sidebar.selectbox(
-    'Corretor 2', ['Todos'] + list(df['Corretor 2'].unique()))
+    'Corretor 2', ['Todos'] + list(df[' Corretor 2'].unique()))
 produto = st.sidebar.selectbox(
     'PRODUTO', ['Todos'] + list(df['PRODUTO'].unique()))
 uf = st.sidebar.selectbox('UF', ['Todos'] + list(df['UF'].unique()))
@@ -123,9 +185,9 @@ df_filtrado = df_filtrado[mask_data]
 if gerente != 'Todos':
     df_filtrado = df_filtrado[df_filtrado[' GERENTE'] == gerente]
 if corretor1 != 'Todos':
-    df_filtrado = df_filtrado[df_filtrado['Corretor 1'] == corretor1]
+    df_filtrado = df_filtrado[df_filtrado[' Corretor 1'] == corretor1]
 if corretor2 != 'Todos':
-    df_filtrado = df_filtrado[df_filtrado['Corretor 2'] == corretor2]
+    df_filtrado = df_filtrado[df_filtrado[' Corretor 2'] == corretor2]
 if produto != 'Todos':
     df_filtrado = df_filtrado[df_filtrado['PRODUTO'] == produto]
 if uf != 'Todos':
