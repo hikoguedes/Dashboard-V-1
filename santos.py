@@ -6,9 +6,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import io  # Para manipulação de dados em formato de bytes
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LinearRegression
+# from sklearn.metrics import mean_squared_error
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
