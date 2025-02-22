@@ -77,7 +77,7 @@ def load_data(filepath, sep=';'):
 
 
 # ✅ Caminho do arquivo (CSV ou XLSX)
-caminho_arquivo = r"ETL_HG_VENDAS_PY.csv"  # Altere o caminho aqui
+caminho_arquivo = r"claro_HG_VENDAS_PY.csv"  # Altere o caminho aqui
 
 # ============================
 # 🔹 EXECUÇÃO
