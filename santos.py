@@ -162,7 +162,34 @@ corretor2 = st.sidebar.selectbox(
     'Corretor 2', ['Todos'] + list(df[' Corretor 2'].unique()))
 produto = st.sidebar.selectbox(
     'PRODUTO', ['Todos'] + list(df['PRODUTO'].unique()))
-uf = st.sidebar.selectbox('UF', ['Todos'] + list(df['UF'].unique()))
+
+
+
+# ✅ Remover espaços em branco dos nomes das colunas
+df.columns = df.columns.str.strip()
+
+# ✅ Verificar as colunas disponíveis
+if 'UF' in df.columns:
+    # ✅ Remover traços '-' da coluna 'UF' e preencher valores ausentes com 'Não Informado'
+    df['UF'] = df['UF'].astype(str).str.replace('-', '').str.strip()
+
+    # ✅ Sidebar com o filtro de UF
+    uf = st.sidebar.selectbox('UF', ['Todos'] + list(df['UF'].unique()))
+
+    # ✅ Aplicar o filtro selecionado
+    if uf != 'Todos':
+        df = df[df['UF'] == uf]
+
+    # ✅ Mostrar o DataFrame filtrado
+    st.write(df)
+
+else:
+    st.error("⚠️ Coluna 'UF' não encontrada no DataFrame.")
+
+
+
+
+
 origem_venda = st.sidebar.selectbox(
     'Origem da venda', ['Todos'] + list(df['Origem da venda'].unique()))
 campanha = st.sidebar.selectbox(
