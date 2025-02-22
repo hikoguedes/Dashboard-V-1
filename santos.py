@@ -217,7 +217,15 @@ if pagina == 'HOME':
         # Filtrando os dados para excluir as linhas com 'CANCELADO' em "Status 2"
         df_filtrado_sem_cancelado = df_filtrado[df_filtrado['Status 2'] != 'CANCELADO']
 
-        # Calculando o total da coluna "Valor vendido" sem os "CANCELADO"
+        # Convertendo a coluna para numérico
+        df_filtrado_sem_cancelado['Valor vendido'] = pd.to_numeric(
+            df_filtrado_sem_cancelado['Valor vendido'], errors='coerce')
+
+# Substituindo NaN por 0
+        df_filtrado_sem_cancelado['Valor vendido'] = df_filtrado_sem_cancelado['Valor vendido'].fillna(
+            0)
+
+# Fazendo a soma
         total_valor_vendido_sem_cancelado = df_filtrado_sem_cancelado['Valor vendido'].sum(
         )
 
