@@ -86,7 +86,7 @@ df = load_data(caminho_arquivo)
 # ============================
 if not df.empty:
     st.title("📊 Análise de Dados")
-    st.dataframe(df)
+    # st.dataframe(df)
 else:
     st.error("⚠️ Não foi possível carregar o DataFrame. Verifique o arquivo.")
 
