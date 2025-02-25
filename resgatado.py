@@ -70,6 +70,84 @@ def load_data(filepath, sep=','):
 
 # ============================
 # 🔹 CAMINHO LOCAL OU LINK
+
+
+
+# Initialize all variables with default values
+def initialize_variables():
+    return {
+        # Sales and Status Variables
+        'total_valor_vendido_sem_cancelado': 0,
+        'total_desconto_financeiro_sem_cancelado': 0,
+        'valor_final': 0,
+        'quant_assinado': 0,
+        'quant_nao_assinado': 0,
+        'df_vendas_agrupadas':0,
+        
+        # Purchase Latency Variables
+        'media_latencia_compra': 0,
+        'media_latencia_compra_arredondada': 0,
+        
+        # Table Type Quantities and Percentages
+        'quant_a_vista': 0,
+        'percent_a_vista': 0,
+        'quant_curta': 0,
+        'percent_curta': 0,
+        'quant_longa': 0,
+        'percent_longa': 0,
+        'quant_longuissima': 0,
+        'percent_longuissima': 0,
+        
+        # Monthly Analysis Variables
+        'ultima_variacao': '➡️',
+        'ultimo_valor': 0,
+        'ultimo_ano': 'Sem Dados',
+        'ultimo_mes': 'Sem Dados',
+        
+        # Financial Metrics
+        'total_valor_vendido_filtrado': 0,
+        'total_clientes_filtrado': 0,
+        'ticket_medio_filtrado': 0,
+        'total_follow_ups': 0,
+        'total_entrada': 0,
+        'percent_entrada': 0,
+        
+        # Unit Type Variables
+        'quant_integral': 0,
+        'percent_integral': 0,
+        'quant_4_semanas': 0,
+        'percent_4_semanas': 0,
+        'quant_6_semanas': 0,
+        'percent_6_semanas': 0,
+        'quant_13_semanas': 0,
+        'percent_13_semanas': 0,
+        
+        # Discount Variables
+        'total_desconto_financeiro': 0,
+        'percent_desconto_financeiro': 0,
+        'total_desconto_viabilidade': 0,
+        'percent_desconto_viabilidade': 0,
+        'total_ganho_viabilidade': 0,
+        'percent_ganho_viabilidade': 0,
+        
+        # Client Variables
+        'total_clientes': 0,
+        
+        # Formatted Values
+        'total_desconto_financeiro_formatado': "R$ 0,00",
+        'total_desconto_viabilidade_formatado': "R$ 0,00",
+        'total_ganho_viabilidade_formatado': "R$ 0,00"
+    }
+
+# Initialize variables at the start of your script
+vars = initialize_variables()
+
+
+# After your imports...
+
+# Initialize variables
+vars = initialize_variables()
+
 # ============================
 
 
@@ -122,7 +200,7 @@ data_fim_max = pd.to_datetime('2027-12-31').date()
 
 # Valores padrão para o filtro (pode ser ajustado conforme necessidade)
 data_inicio_padrao = pd.to_datetime('2021-01-01').date()
-data_fim_padrao = pd.to_datetime('2021-12-31').date()
+data_fim_padrao = pd.to_datetime('2025-12-31').date()
 
 # Filtro de data com os novos limites
 data_inicio = st.sidebar.date_input(
@@ -200,7 +278,7 @@ if pagina == 'HOME':
     st.title('🏠 Página Home')
     if not df_filtrado.empty:
         st.write("### Análise de Valores Vendidos")
-        st.write(df_filtrado)
+        #st.write(df_filtrado)
 
         ####################################### BEGIN HOME############################################################
         ####################################################################################################
@@ -591,7 +669,7 @@ if pagina == 'HOME':
                 st.markdown(
                     f"""
                         <div class="card">
-                            <span style="color: black; font-size: 20px; font-weight: bold;">💰 VGV Bruto</span>
+                            <span style="color: black; font-size: 15px; font-weight: bold;">💰 VGV Bruto</span>
                             <span style="color: black; font-size: 15px;">R$ {total_valor_vendido_sem_cancelado:,.2f}</span>
                             <span style="color: black; font-size: 15px;">Total Assinados: {quant_assinado}</span>
                             <span style="color: black; font-size: 15px;">R$ {ultimo_valor:,.2f}</span>
@@ -1293,149 +1371,149 @@ elif pagina == 'Origens_Estados':
         # ============================
 
         # Criar as colunas para os gráficos e tabelas
-col1, col2 = st.columns(2)
+        col1, col2 = st.columns(2)
 
-# ============================
-# 📊 1️⃣ TABELA: Campanha e Estados
-# ============================
-with col1:
-    st.subheader("📋 Campanhas por Estado com # Clientes")
+        # ============================
+        # 📊 1️⃣ TABELA: Campanha e Estados
+        # ============================
+        with col1:
+            st.subheader("📋 Campanhas por Estado com # Clientes")
 
-    # Exemplo de agrupamento por campanha e estado
-    campanha_estados = df.groupby(['Campanha', 'UF'])[
-        'Valor vendido'].sum().reset_index()
+            # Exemplo de agrupamento por campanha e estado
+            campanha_estados = df.groupby(['Campanha', 'UF'])[
+                'Valor vendido'].sum().reset_index()
 
-# Exibe o DataFrame na tela
-    st.dataframe(campanha_estados)
+        # Exibe o DataFrame na tela
+            st.dataframe(campanha_estados)
 
-    # ============================
-    # 📊 2️⃣ GRÁFICO: Valor Vendido por Campanha
-    # ============================
-with col2:
-    st.subheader("📊 Valor Vendido por Campanha")
-    chart_campanha = pd.pivot_table(
-        df_filtrado, index='Campanha', values='Valor vendido', aggfunc='sum').reset_index()
-    st.bar_chart(chart_campanha, x='Campanha', y='Valor vendido')
+            # ============================
+            # 📊 2️⃣ GRÁFICO: Valor Vendido por Campanha
+            # ============================
+        with col2:
+            st.subheader("📊 Valor Vendido por Campanha")
+            chart_campanha = pd.pivot_table(
+                df_filtrado, index='Campanha', values='Valor vendido', aggfunc='sum').reset_index()
+            st.bar_chart(chart_campanha, x='Campanha', y='Valor vendido')
 
-    # ============================
-    # 🔹 NOVA LINHA PARA MAIS GRÁFICOS
-    # ============================
-col3, col4 = st.columns(2)
+            # ============================
+            # 🔹 NOVA LINHA PARA MAIS GRÁFICOS
+            # ============================
+        col3, col4 = st.columns(2)
 
-# ============================
-# 📊 3️⃣ GRÁFICO: Valor Vendido por Estado
-# ============================
-with col3:
-    st.subheader("📊 Valor Vendido por UF")
-    chart_uf = pd.pivot_table(
-        df_filtrado, index='UF', values='Valor vendido', aggfunc='sum').reset_index()
-    st.bar_chart(chart_uf, x='UF', y='Valor vendido')
+        # ============================
+        # 📊 3️⃣ GRÁFICO: Valor Vendido por Estado
+        # ============================
+        with col3:
+            st.subheader("📊 Valor Vendido por UF")
+            chart_uf = pd.pivot_table(
+                df_filtrado, index='UF', values='Valor vendido', aggfunc='sum').reset_index()
+            st.bar_chart(chart_uf, x='UF', y='Valor vendido')
 
-    # ============================
-    # 📊 4️⃣ TABELA: Clientes por Campanha
-    # ============================
-with col4:
-    st.subheader("📋 Número de Clientes por Campanha")
-    clientes_por_campanha = df_filtrado.groupby(
-        'Campanha')['CLIENTE'].nunique().reset_index()
-    clientes_por_campanha.rename(
-        columns={'CLIENTE': '# Clientes'}, inplace=True)
-    st.dataframe(clientes_por_campanha)
+            # ============================
+            # 📊 4️⃣ TABELA: Clientes por Campanha
+            # ============================
+        with col4:
+            st.subheader("📋 Número de Clientes por Campanha")
+            clientes_por_campanha = df_filtrado.groupby(
+                'Campanha')['CLIENTE'].nunique().reset_index()
+            clientes_por_campanha.rename(
+                columns={'CLIENTE': '# Clientes'}, inplace=True)
+            st.dataframe(clientes_por_campanha)
 
-    # Remover espaços extras nos nomes das colunas
-    df_filtrado.columns = df_filtrado.columns.str.strip()
+            # Remover espaços extras nos nomes das colunas
+            df_filtrado.columns = df_filtrado.columns.str.strip()
 
-    # Converter 'Data da Venda' para datetime e extrair o ano
-    df_filtrado['Data da Venda'] = pd.to_datetime(
-        df_filtrado['Data da Venda'])
-    df_filtrado['Ano'] = df_filtrado['Data da Venda'].dt.year
+            # Converter 'Data da Venda' para datetime e extrair o ano
+            df_filtrado['Data da Venda'] = pd.to_datetime(
+                df_filtrado['Data da Venda'])
+            df_filtrado['Ano'] = df_filtrado['Data da Venda'].dt.year
 
-    # Verificar se 'Ano' existe e criar se necessário
-if 'Ano' not in df_filtrado.columns:
-    df_filtrado['Ano'] = pd.to_datetime(
-        df_filtrado['Data da Venda']).dt.year
+            # Verificar se 'Ano' existe e criar se necessário
+        if 'Ano' not in df_filtrado.columns:
+            df_filtrado['Ano'] = pd.to_datetime(
+                df_filtrado['Data da Venda']).dt.year
 
-    # ============================
-    # 🔹 INTERFACE DO STREAMLIT
-    # ============================
+            # ============================
+            # 🔹 INTERFACE DO STREAMLIT
+            # ============================
 
-    # Título do app
-    st.title("📊 Ranking de Vendas por Campanha por Ano (2022 - 2025)")
+            # Título do app
+            st.title("📊 Ranking de Vendas por Campanha por Ano (2022 - 2025)")
 
-    # Filtro de anos disponíveis
-    anos_disponiveis = sorted(df_filtrado['Ano'].unique().tolist())
-    anos_selecionados = st.multiselect(
-        '🔎 Selecione os Anos:', anos_disponiveis, default=anos_disponiveis)
+            # Filtro de anos disponíveis
+            anos_disponiveis = sorted(df_filtrado['Ano'].unique().tolist())
+            anos_selecionados = st.multiselect(
+                '🔎 Selecione os Anos:', anos_disponiveis, default=anos_disponiveis)
 
-    # Filtrar o DataFrame pelos anos selecionados
-    df_filtrado_anos = df_filtrado[df_filtrado['Ano'].isin(
-        anos_selecionados)]
+            # Filtrar o DataFrame pelos anos selecionados
+            df_filtrado_anos = df_filtrado[df_filtrado['Ano'].isin(
+                anos_selecionados)]
 
-    # ============================
-    # 🔹 AGRUPAMENTO DE DADOS
-    # ============================
+            # ============================
+            # 🔹 AGRUPAMENTO DE DADOS
+            # ============================
 
-    # Agrupar por 'Campanha' e 'Ano' para somar os valores vendidos
-    ranking_campanha_ano = df_filtrado_anos.groupby(
-        ['Campanha', 'Ano'])['Valor vendido'].sum().reset_index()
+            # Agrupar por 'Campanha' e 'Ano' para somar os valores vendidos
+            ranking_campanha_ano = df_filtrado_anos.groupby(
+                ['Campanha', 'Ano'])['Valor vendido'].sum().reset_index()
 
-    # Ordenar por Ano e pelo maior valor vendido
-    ranking_campanha_ano = ranking_campanha_ano.sort_values(
-        ['Ano', 'Valor vendido'], ascending=[True, False])
+            # Ordenar por Ano e pelo maior valor vendido
+            ranking_campanha_ano = ranking_campanha_ano.sort_values(
+                ['Ano', 'Valor vendido'], ascending=[True, False])
 
-    # ============================
-    # 🔹 GRÁFICO ALTAIR (Com Layering Correto)
-    # ============================
+            # ============================
+            # 🔹 GRÁFICO ALTAIR (Com Layering Correto)
+            # ============================
 
-    # Criar gráfico de barras
-    bars = alt.Chart(ranking_campanha_ano).mark_bar().encode(
-        x=alt.X('Campanha:N', title='Campanha'),
-        y=alt.Y('Valor vendido:Q', title='Valor Vendido (R$)'),
-        color=alt.Color('Campanha:N', title='Campanha'),
-        tooltip=[
-            alt.Tooltip('Campanha:N', title='Campanha'),
-            alt.Tooltip('Ano:N', title='Ano'),
-            alt.Tooltip('Valor vendido:Q',
-                        title='Valor Vendido', format=',.2f')
-        ]
-    )
+            # Criar gráfico de barras
+            bars = alt.Chart(ranking_campanha_ano).mark_bar().encode(
+                x=alt.X('Campanha:N', title='Campanha'),
+                y=alt.Y('Valor vendido:Q', title='Valor Vendido (R$)'),
+                color=alt.Color('Campanha:N', title='Campanha'),
+                tooltip=[
+                    alt.Tooltip('Campanha:N', title='Campanha'),
+                    alt.Tooltip('Ano:N', title='Ano'),
+                    alt.Tooltip('Valor vendido:Q',
+                                title='Valor Vendido', format=',.2f')
+                ]
+            )
 
-    # Adicionar rótulos de valores nas barras
-    text = bars.mark_text(
-        align='center',
-        baseline='bottom',
-        dy=-5,  # Ajuste vertical do texto
-        fontSize=10
-    ).encode(
-        text=alt.Text('Valor vendido:Q', format=',.2f')
-    )
+            # Adicionar rótulos de valores nas barras
+            text = bars.mark_text(
+                align='center',
+                baseline='bottom',
+                dy=-5,  # Ajuste vertical do texto
+                fontSize=10
+            ).encode(
+                text=alt.Text('Valor vendido:Q', format=',.2f')
+            )
 
-    # Layer dos gráficos (barras + rótulos)
-    layered_chart = alt.layer(bars, text)
+            # Layer dos gráficos (barras + rótulos)
+            layered_chart = alt.layer(bars, text)
 
-    # Facetear o gráfico por Ano após o layering
-    final_chart = layered_chart.facet(
-        column=alt.Column('Ano:N', title='Ano')
-    ).configure_axis(
-        labelFontSize=12,
-        titleFontSize=14
-    ).configure_title(
-        fontSize=16
-    )
+            # Facetear o gráfico por Ano após o layering
+            final_chart = layered_chart.facet(
+                column=alt.Column('Ano:N', title='Ano')
+            ).configure_axis(
+                labelFontSize=12,
+                titleFontSize=14
+            ).configure_title(
+                fontSize=16
+            )
 
-    # ============================
-    # 🔹 EXIBIÇÃO NO STREAMLIT
-    # ============================
-    st.altair_chart(final_chart, use_container_width=True)
+            # ============================
+            # 🔹 EXIBIÇÃO NO STREAMLIT
+            # ============================
+            st.altair_chart(final_chart, use_container_width=True)
 
-    # ============================
-    # 🔹 TABELA DE DADOS (Opcional)
-    # ============================
-    st.subheader("📋 Dados de Vendas por Ano e Campanha")
-    st.dataframe(ranking_campanha_ano)
+            # ============================
+            # 🔹 TABELA DE DADOS (Opcional)
+            # ============================
+            st.subheader("📋 Dados de Vendas por Ano e Campanha")
+            st.dataframe(ranking_campanha_ano)
 
-else:
-    st.write("Nenhum dado encontrado.")
+        else:
+            st.write("Nenhum dado encontrado.")
 
 
 # PÁGINA GRÁFICOS TABELA
@@ -1457,10 +1535,22 @@ if pagina == 'GRÁFICOS TABELA':
         # ============================
 
         # Título do app
-        st.title(
-            "📊 Análise de Vendas por Campanha com Layout Personalizado")
+       # Título personalizado com HTML/CSS
+        st.markdown(
+             """
+                <h1 style='font-size: 20px; text-align: center;'>
+                  📊 Análise de Vendas por Campanha com Layout Personalizado
+                </h1>
+                 """,
+                 unsafe_allow_html=True
+                    )
 
-        # ============================
+       
+#############################Inicio Grafico ######################################
+
+
+
+ # ============================
         # 📊 1️⃣ LINHA 1: TABELA E GRÁFICO PRINCIPAL
         # _________________________________________________________________________________________#
 
@@ -1557,7 +1647,21 @@ if pagina == 'GRÁFICOS TABELA':
     # 🔹 GRÁFICO DE LINHAS
     # ============================
 
-    st.title("📈 Vendas Mês a Mês - À Vista (Filtrável por Ano e Tipo de Unidade)")
+        st.title("📈 Vendas Mês a Mês - À Vista (Filtrável por Ano e Tipo de Unidade)")
+        # ✅ Verificar as colunas antes de prosseguir
+           #st.write("Colunas disponíveis:", df.columns.tolist())
+
+    # ✅ Extraindo o mês da coluna de data
+    df['Mês'] = df['Data da Venda'].dt.month
+
+    # Simulando filtro aplicado
+    #df_filtrado = df.copy()
+
+    # ✅ Verificar se 'Mês' foi criado corretamente
+    st.write("Amostra dos dados após extração do Mês:")
+
+    # Anos selecionados para o gráfico
+    anos_selecionados = [2022, 2023, 2024, 2025]
 
     # Criar gráfico
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -1568,38 +1672,54 @@ if pagina == 'GRÁFICOS TABELA':
 
     # Verifica se há dados após o filtro
     if not df_filtrado.empty:
+        # ✅ Agrupamento corrigido
+        df_vendas_agrupadas = df_filtrado.groupby(['Ano', 'Mês']).agg({
+            'Valor vendido': 'sum',
+            '# Clientes': 'sum'
+        }).reset_index()
+
+        # ✅ Verificar se o agrupamento ocorreu corretamente
+        st.write("Vendas agrupadas por Ano e Mês:")
+
         # Plotar linhas para cada ano selecionado
         for ano in anos_selecionados:
             df_ano = df_vendas_agrupadas[df_vendas_agrupadas['Ano'] == ano]
-    if not df_ano.empty:
-        ax.plot(df_ano['Mês'], df_ano['Valor vendido'],
-                marker=marcadores.get(ano, 'o'),
-                color=cores.get(ano, 'black'),
-                label=str(ano))
 
-        # Adicionar rótulos com quantidade de clientes e valor vendido
-    for i, row in df_ano.iterrows():
-        ax.text(row['Mês'], row['Valor vendido'],
-                f"R$ {row['Valor vendido']:,.0f}\n{int(row['# Clientes'])} clientes",
-                ha='center', va='bottom', fontsize=8)
+            # Verifica se há dados para o ano selecionado
+            if not df_ano.empty:
+                ax.plot(df_ano['Mês'], df_ano['Valor vendido'],
+                        marker=marcadores.get(ano, 'o'),
+                        color=cores.get(ano, 'black'),
+                        label=str(ano))
 
-    # Configurações do gráfico
+                # Adicionar rótulos com quantidade de clientes e valor vendido
+                for i, row in df_ano.iterrows():
+                    ax.text(row['Mês'], row['Valor vendido'],
+                            f"R$ {row['Valor vendido']:,.0f}\n{int(row['# Clientes'])} clientes",
+                            ha='center', va='bottom', fontsize=8)
+
+        # Configurações do gráfico
         ax.set_xlabel('Mês')
         ax.set_ylabel('Valor Vendido (R$)')
         ax.set_title('Evolução das Vendas À Vista por Ano e Tipo de Unidade')
         ax.grid(True, linestyle='--', alpha=0.7)
         ax.set_xticks(range(1, 13))
-        ax.set_xticklabels(['Jan', 'Fev', 'Mar', 'Abr', 'Mai',
-                           'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'])
-        ax.yaxis.set_major_formatter(
-            mticker.FuncFormatter(lambda x, _: f'R$ {x:,.0f}'))
+        ax.set_xticklabels(['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul',
+                            'Ago', 'Set', 'Out', 'Nov', 'Dez'])
+        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'R$ {x:,.0f}'))
         ax.legend(title='Ano')
 
-    # Exibir o gráfico
+        # Exibir o gráfico
         st.pyplot(fig)
 
-    # Exibir a tabela de dados
+        # Exibir a tabela de dados
         st.subheader("📋 Vendas Mensais - À Vista")
-        st.dataframe(df_vendas_agrupadas)
+        #st.dataframe(df_vendas_agrupadas)
+
     else:
-        st.warning("⚠️ Nenhum dado disponível para os filtros aplicados.")
+        st.warning("⚠️ Nenhum dado disponível após o filtro aplicado.")
+
+
+
+
+#############################Fim Grafico##########################################
