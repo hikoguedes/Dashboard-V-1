@@ -3,3 +3,4 @@ openpyxl
 pygsheets
 plotly.express
 bar_chart_race
+setuptools
