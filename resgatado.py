@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import io  # Para manipulação de dados em formato de bytes
 import numpy as np
 # from sklearn.model_selection import train_test_split
-# from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression
 # from sklearn.metrics import mean_squared_error
 # import plotly.express as px
 # import plotly.graph_objects as go
@@ -20,6 +20,10 @@ import plotly.express as px
 import bar_chart_race as bcr
 import datetime
 import matplotlib.pyplot as plt
+#import scikit-learn
+#from sklearn.linear_model import LinearRegression
+
+
 plt.rcParams['animation.writer'] = 'pillow'
 
 
@@ -56,22 +60,87 @@ st.set_page_config(layout="wide")
 #url = "https://my.microsoftpersonalcontent.com/personal/9b2376debd26f163/_layouts/15/download.aspx?UniqueId=bd26f163-76de-2023-809b-750000000000&Translate=false&tempauth=v1e.eyJzaXRlaWQiOiJlNDc5ZWIzOS01NDYxLTQ0NjEtODIxMy1hMjg5NjY4YWQ2MGMiLCJhcHBfZGlzcGxheW5hbWUiOiJPREMgQ29uc3VtZXIiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDEwMTcwNDQifQ.Q_YH_QNX5AJp0Xlb9A6dxAORbYmscSNNeewTJOSmuJ3beNIImTlCJP9idYIHorF-nhfBgGut78Jppz6bODg26T2SKU9NOTj43B5an0hlJFhigsX1xNPIXSbd3-hXZLxLpIu3Sp2iTD_QKAm0AW6ltpTAYuulbUGBvdVNbkzQsfzt1YAiP9mIMeztrZYPIwNtVwYuAcI2F_XWc0Oj0GMQuiKNow3rj2MmgyZINDTqeaO7Eat8VmVJmYK0slC1XGeAYfuf8NN4p4JuLTK9RG96NcktEKSt736CGnbRMFk1JF_zLArOtMt3bhEFIYFmRFUJMpGWm8KJ5Wd-3pAIMTkEDDr0gM2sqnZImzmhxtm9QvNJcYET7_aqWdxiU6aN2a0ynXeYJOdn-7yVEQeb7XC0ng.AUW9l2NwlrWKEN1OdeW2-VU_E6VMia6o7DngA3zeH8s&ApiVersion=2.0"
 
 #url = "https://my.microsoftpersonalcontent.com/personal/9b2376debd26f163/_layouts/15/download.aspx?UniqueId=bd26f163-76de-2023-809b-750000000000&Translate=false&tempauth=v1e.eyJzaXRlaWQiOiJlNDc5ZWIzOS01NDYxLTQ0NjEtODIxMy1hMjg5NjY4YWQ2MGMiLCJhcHBfZGlzcGxheW5hbWUiOiJPREMgQ29uc3VtZXIiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDEwMjM0MjUifQ.3LNABcTPLXT9q3GiRoXizRWzndxrDN9sKH-kPeLufJZ4rsVoeNI9w_i2gPo04_rr-qbi8mFTEEHDcvYHjotULJqYIgNYqy0S5I3Agvt-HmJwyFp6tyY1hzF4ArKe25aHJSNAxLZPsfYWenkE-EhZDf3lcvrJmZvZ8f-Br89ORM2kUmm0cusZ2SwYtXOvhit7E9kSJjn_zfAS60MSLrVF40FXKkpG0jivaP-xxLb3CdFx7MSD0DRrE3pVHSSHNv78VcRD37GDGqkCnxKOpZpNs9AEMpHzS7JH3MWgOq5HDNouGsXU-SdG1lozpT6ccpA5hvRFeXGW7NP0BqOMNZN19bGLoBnlKBH5pHiOAVHDuwi9PcZg2NG_h0a1Iyehk86niNEypqhdS9wzv-UomkEBeg.Ww7nWZIO5LKkK6g04kkPcCYHghDK94qchFIKp4YGp0M&ApiVersion=2.0"
-url = "https://my.microsoftpersonalcontent.com/personal/9b2376debd26f163/_layouts/15/download.aspx?UniqueId=bd26f163-76de-2023-809b-750000000000&Translate=false&tempauth=v1e.eyJzaXRlaWQiOiJlNDc5ZWIzOS01NDYxLTQ0NjEtODIxMy1hMjg5NjY4YWQ2MGMiLCJhcHBfZGlzcGxheW5hbWUiOiJPREMgQ29uc3VtZXIiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDEwMzIwMjIifQ.mPS-3pCiBetml2oF5FfUWLFtezRuDlCHoU6V6l8qTU57UKstaLWJztLAAM0QvYlQCvKX7cm3w5BEPLCQ0yYZZ8c2j2TqARz1uvgD9-pP1GdEd1ZX2cMxn4M_5YkLdw99CDxc8sDkF58wo55aH6HZn-oKulQXeWH8bBOxShbOB1bhcAVCtpn6Dvh6YKxFDzjxgseNDYPJgeywcb-Xrfq8R9oyoqbKDt67VeBHPBa0aS2a8zf9ZZW1BLUq4K4oc8NqP8R9d9fl1BMWCj4Dh1daNEo80yzCoTVz6p7oDO9F0UdTVqU3Rn_L42BdSu68zEcv-VND3wqpQeb9VxgOYnD_DVbR-BwkeU1hVzyWd-T3O6oKQpG02VWFfsUs763MkmlWyJtfdXyrJ-b6giV1msvqpQ.p3j5sP8ZW6Y-14UQ5o2NHa62-P4diUV0ekPygqf6lKc&ApiVersion=2.0"
+##url = "https://my.microsoftpersonalcontent.com/personal/9b2376debd26f163/_layouts/15/download.aspx?UniqueId=bd26f163-76de-2023-809b-750000000000&Translate=false&tempauth=v1e.eyJzaXRlaWQiOiJlNDc5ZWIzOS01NDYxLTQ0NjEtODIxMy1hMjg5NjY4YWQ2MGMiLCJhcHBfZGlzcGxheW5hbWUiOiJPREMgQ29uc3VtZXIiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDEwMzU5ODgifQ.-5pkOH1mWhVetkQviHrssEQBx0aoIBPwmKGYB1s3JKyF5heiBzhen8K6OrFa8WP0Rd5xHbnR33OBeOmjPSkMr4tjz0yMhIHih5cOEnRptKcK_yI9xQTO7Uy9mUWqAR5cFfRvppcjAPSiSw5YtOh30FUa-AsCgVSBvmdb6ArXH0Z39rOEaft4pOVyl9KnfWy-9-iFP9MYtYZUt4-GEhzIiRQ4f2p0KItok2nxo7ZF-p4p_AknPaWI3FO_tWGh8K5i2sDaykRyh9BxmyAsKMVTPa-tl1gCtDdkrr9CytnyQE62_KkgVwYhR_za34fUb5HZnTefBeTiLK1dWjl215KxoTO1_I77Ml_e7KVE9KTzcsbe48m7cjTacd-z1_Dm1b3VYhNo7MpaiPj1AxrSD8HUTg.JRCnd2jJD0slrr3vjhgscGmWxuGh2Gav2lC4xfS_K8s&ApiVersion=2.0"
+
+
 # Função para carregar o arquivo Excel
-try:
+#try:
     # Nome da aba sem espaços extras
-    df = pd.read_excel(url, sheet_name="Consulta Contratos", engine="openpyxl")
+ #   df = pd.read_excel(url, sheet_name="Consulta Contratos", engine="openpyxl")
     #df = pd.read_excel('BASEOFICIAL.xlsx')
-    st.write("✅ Dados da Planilha:")
+  #  st.write("✅ Dados da Planilha:")
     #st.dataframe(df)
-except Exception as e:
-    st.error(f"🚫 Erro ao carregar o arquivo: {e}")
+#except Exception as e:
+   # st.error(f"🚫 Erro ao carregar o arquivo: {e}")
+
+# ============================
+# 🔹 FUNÇÃO PARA CARREGAR DADOS (CSV ou XLSX)
+# ============================
 
 
+if "df" not in st.session_state: 
+
+    def load_data(filepath, sep=',', sheet_name='Consulta Contratos'):
+        """
+        Função para carregar arquivos CSV ou XLSX com tratamento de erros e garantir que a planilha correta seja carregada.
+        """
+        try:
+            # Verifica a extensão do arquivo
+            file_extension = os.path.splitext(filepath)[1].lower()
+
+            if file_extension == '.csv':
+                # ✅ Lê o arquivo CSV
+                try:
+                    df = pd.read_csv(filepath, encoding='ISO-8859-1', sep=sep, 
+                                    quoting=csv.QUOTE_NONE, on_bad_lines='skip')
+                    st.success("✅ Arquivo CSV lido com sucesso usando ISO-8859-1")
+                except UnicodeDecodeError:
+                    st.warning("⚠️ Erro com ISO-8859-1. Tentando com 'latin1'...")
+                    df = pd.read_csv(filepath, encoding='latin1', sep=sep, 
+                                    quoting=csv.QUOTE_NONE, on_bad_lines='skip')
+                    st.success("✅ Arquivo CSV lido com sucesso usando latin1")
+
+            elif file_extension in ['.xlsx', '.xls']:
+                # ✅ Lê arquivo Excel e carrega a planilha correta
+                df = pd.read_excel(filepath, sheet_name=sheet_name, engine='openpyxl' if file_extension == '.xlsx' else 'xlrd')
+                st.success(f"✅ Planilha '{sheet_name}' lida com sucesso")
+
+            else:
+                st.error("🚫 Formato de arquivo não suportado. Use .csv, .xlsx ou .xls")
+                return pd.DataFrame()
+
+            return df
+
+        except pd.errors.ParserError as e:
+            st.error(f"🚫 Erro ao ler o CSV: {e}")
+            return pd.DataFrame()
+
+        except ValueError as e:
+            st.error(f"🚫 Erro ao carregar a planilha '{sheet_name}': {e}")
+            return pd.DataFrame()
+
+        except Exception as e:
+            st.error(f"🚫 Erro inesperado: {e}")
+            return pd.DataFrame()
+
+    # ============================
+    # 🔹 EXECUÇÃO
+    # ============================
+
+    # ✅ Caminho do arquivo
+    caminho_arquivo = "BASEOFICIAL.xlsx"  # Altere se necessário
+
+    # ✅ Carregar a planilha específica
+    df = load_data(caminho_arquivo)
+
+    # Exibir as 5 primeiras linhas no Streamlit
+    #if not df.empty:
+        #st.write(df.head())
 
 
-#
-# 🔹 CAMINHO LOCAL OU LINK
+st.session_state["data"] = df
+
+################################CONEXÂO################
 
 
 
@@ -337,9 +406,11 @@ if pagina == 'HOME':
         # Calculando o total das vendas
 
         df_assinado = df_filtrado[df_filtrado['Status 1'] == 'ASSINADO']
+        df_assinado_Cliente = df_filtrado[df_filtrado['# Clientes'] == 1]
 
         # Contar a quantidade de registros com "ASSINADO" na coluna "Status 1"
         quant_assinado = df_assinado.shape[0]
+        quant_assinado_Cliente = df_assinado_Cliente.shape[0]
 
         # Filtrando os dados para excluir as linhas com 'CANCELADO' em "Status 2"
         df_filtrado_sem_cancelado = df_filtrado[df_filtrado['Status 2'] != 'CANCELADO']
@@ -899,7 +970,7 @@ if pagina == 'HOME':
                     f"""
                             <div class="card" style="background-color:#12172b">
                                 <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">💰 VGV Total Bruto</span>
-                                <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">Total Assinados: {quant_assinado}</span>
+                                <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">Total Assinados: {quant_assinado_Cliente}</span>
                                 <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">{formatar_br(total_valor_vendido_sem_cancelado)}</span>
                                 <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">Mês: {ultimo_mes} - Ano: {ultimo_ano}</span>
                                 <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">{ultima_variacao}</span>
@@ -3361,7 +3432,637 @@ if pagina == 'Previsão de Vendas':
 
 
 
-      
+
+
+
+
+
+
+
+
+
+
+
+        # Lendo o arquivo XLSX
+        #df = pd.read_excel('claro_HG_VENDAS_PY.xlsx')
+
+        # Título do Dashboard
+        st.title("Previsão de Vendas por GERENTE - 2025")
+
+        # Verificar valores nulos
+        nulos_data = df['Data da Venda'].isnull().sum()
+        nulos_gerente = df['GERENTE'].isnull().sum()
+
+        # Exibir contagem de valores nulos
+        st.write(f"**Valores Nulos em 'Data da Venda':** {nulos_data}")
+        st.write(f"**Valores Nulos em 'GERENTE':** {nulos_gerente}")
+
+        # Converter datas e extrair ano/mês
+        df['Data da Venda'] = pd.to_datetime(df['Data da Venda'])
+        df['Ano'] = df['Data da Venda'].dt.year
+        df['Mês'] = df['Data da Venda'].dt.month
+
+        # Filtrar apenas os anos de 2022, 2023 e 2024
+        df = df[df['Ano'].isin([2022, 2023, 2024])]
+
+        # Remover registros com dados nulos em colunas essenciais
+        df = df.dropna(subset=['Data da Venda', 'GERENTE'])
+
+        # Agrupar vendas por Ano, Mês e GERENTE
+        df_grouped = df.groupby(['Ano', 'Mês', 'GERENTE']).size().reset_index(name='Vendas')
+
+        # Exibir estatísticas básicas
+        estatisticas_vendas = df_grouped.groupby(['Ano', 'GERENTE'])['Vendas'].sum().reset_index()
+        st.write("**Total de Vendas por Ano e GERENTE:**")
+        st.write(estatisticas_vendas)
+
+        # Codificar 'GERENTE' para o modelo
+        df_grouped['GERENTE_Cod'] = pd.factorize(df_grouped['GERENTE'])[0]
+
+        # Features e target
+        X = df_grouped[['Ano', 'Mês', 'GERENTE_Cod']]
+        y = df_grouped['Vendas']
+
+        # Treinar modelo de Regressão Linear
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Criar dados para 2025 para cada GERENTE
+        gerentes = df_grouped['GERENTE'].unique()
+        meses = np.arange(1, 13)
+
+        # DataFrame para armazenar previsões de 2025
+        previsoes_2025 = pd.DataFrame()
+
+        for gerente in gerentes:
+            gerente_cod = pd.factorize(df_grouped['GERENTE'])[0][df_grouped['GERENTE'] == gerente][0]
+            ano_2025 = np.full(12, 2025)
+            gerente_array = np.full(12, gerente_cod)
+
+            X_2025 = pd.DataFrame({
+                'Ano': ano_2025,
+                'Mês': meses,
+                'GERENTE_Cod': gerente_array
+            })
+
+            pred_2025 = model.predict(X_2025)
+
+            df_temp = pd.DataFrame({
+                'Ano': 2025,
+                'Mês': meses,
+                'GERENTE': gerente,
+                'Previsão de Vendas': pred_2025.astype(int)
+            })
+
+            previsoes_2025 = pd.concat([previsoes_2025, df_temp])
+
+        # Criar o gráfico interativo com Plotly
+        fig = px.line(previsoes_2025, 
+                    x='Mês', 
+                    y='Previsão de Vendas', 
+                    color='GERENTE', 
+                    markers=True,
+                    title='Previsão de Vendas por GERENTE - 2025',
+                    labels={'Mês': 'Mês', 'Previsão de Vendas': 'Número de Vendas'})
+
+        # Adicionar hover e rótulos de valores
+        fig.update_traces(mode='lines+markers+text', 
+                        text=previsoes_2025['Previsão de Vendas'],
+                        textposition='top center',
+                        hovertemplate='Mês: %{x}<br>Vendas: %{y}<br>GERENTE: %{legendgroup}')
+
+        # Configurações adicionais do gráfico
+        fig.update_layout(legend_title_text='GERENTE', 
+                        hovermode='x unified',
+                        xaxis_title='Mês',
+                        yaxis_title='Número de Vendas')
+
+        # Exibir gráfico interativo
+        st.plotly_chart(fig)
+
+        # Exibir a tabela de previsões
+        st.write("Previsão de Vendas para 2025 por GERENTE:")
+        st.dataframe(previsoes_2025)
+
+
+
+
+
+
+
+
+
+        # Análise inicial dos dados de vendas com Campanha
+        st.title("Previsão de Vendas por Campanha - 2025")
+
+        # Verificar valores nulos
+        nulos_data = df['Data da Venda'].isnull().sum()
+        nulos_campanha = df['Campanha'].isnull().sum()
+
+        # Exibir contagem de valores nulos
+        st.write(f"**Valores Nulos em 'Data da Venda':** {nulos_data}")
+        st.write(f"**Valores Nulos em 'Campanha':** {nulos_campanha}")
+
+        # Converter 'Data da Venda' para datetime e extrair ano e mês
+        df['Data da Venda'] = pd.to_datetime(df['Data da Venda'])
+        df['Ano'] = df['Data da Venda'].dt.year
+        df['Mês'] = df['Data da Venda'].dt.month
+
+        # Filtrar apenas os anos de 2022, 2023 e 2024
+        df = df[df['Ano'].isin([2022, 2023, 2024])]
+
+        # Remover registros com dados nulos em colunas essenciais
+        df = df.dropna(subset=['Data da Venda', 'Campanha'])
+
+        # Agrupar vendas por Ano, Mês e Campanha
+        df_grouped = df.groupby(['Ano', 'Mês', 'Campanha']).size().reset_index(name='Vendas')
+
+        # Codificar 'Campanha' para o modelo
+        df_grouped['Campanha Cod'] = pd.factorize(df_grouped['Campanha'])[0]
+
+        # Features e target
+        X = df_grouped[['Ano', 'Mês', 'Campanha Cod']]
+        y = df_grouped['Vendas']
+
+        # Treinar modelo de Regressão Linear
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Criar dados para 2025 para cada Campanha
+        campanhas = df_grouped['Campanha'].unique()
+        meses = np.arange(1, 13)
+
+        # DataFrame para armazenar previsões de 2025
+        previsoes_2025 = pd.DataFrame()
+
+        for campanha in campanhas:
+            campanha_cod = pd.factorize(df_grouped['Campanha'])[0][df_grouped['Campanha'] == campanha][0]
+            ano_2025 = np.full(12, 2025)
+            campanha_array = np.full(12, campanha_cod)
+
+            X_2025 = pd.DataFrame({
+                'Ano': ano_2025,
+                'Mês': meses,
+                'Campanha Cod': campanha_array
+            })
+
+            pred_2025 = model.predict(X_2025)
+            
+            df_temp = pd.DataFrame({
+                'Ano': 2025,
+                'Mês': meses,
+                'Campanha': campanha,
+                'Previsão de Vendas': pred_2025.astype(int)
+            })
+
+            previsoes_2025 = pd.concat([previsoes_2025, df_temp])
+
+        # Criar o gráfico apenas com previsões de 2025
+        st.title("Previsão de Vendas para 2025 por Campanha")
+        fig, ax = plt.subplots(figsize=(14, 7))
+
+        # Plotar apenas as previsões para 2025 por Campanha
+        for campanha in campanhas:
+            df_pred = previsoes_2025[previsoes_2025['Campanha'] == campanha]
+            ax.plot(df_pred['Mês'], df_pred['Previsão de Vendas'], marker='*', linestyle='--', label=f'2025 - {campanha}')
+            for i, value in enumerate(df_pred['Previsão de Vendas']):
+                ax.annotate(f'{value}', (df_pred['Mês'].values[i], value), textcoords="offset points", xytext=(0,10), ha='center')
+
+        # Configurar o gráfico
+        ax.set_xlabel('Mês')
+        ax.set_ylabel('Número de Vendas')
+        ax.set_title('Previsão de Vendas por Campanha - 2025')
+        ax.grid(True, linestyle='--', alpha=0.7)
+        ax.set_xticks(range(1, 13))
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+
+        # Posicionar legenda em duas linhas na parte superior interna do gráfico
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0.98), ncol=4, fontsize='small', frameon=False)
+
+        # Exibir o gráfico
+        st.pyplot(fig)
+
+        # Exibir tabela com previsões para 2025
+        st.write("Previsão de Vendas para 2025 por Campanha:")
+        st.dataframe(previsoes_2025)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # Remover espaços nos nomes das colunas
+        df.columns = df.columns.str.replace(' ', '')
+
+        # Análise inicial dos dados de vendas por Corretor 1
+        st.title("Previsão de Vendas por Corretor 1 - 2025")
+
+        # Verificar valores nulos
+        nulos_data = df['DatadaVenda'].isnull().sum()
+
+        # Exibir contagem de valores nulos
+        st.write(f"**Valores Nulos em 'Data da Venda':** {nulos_data}")
+
+        # Converter 'Data da Venda' para datetime e extrair ano e mês
+        df['DatadaVenda'] = pd.to_datetime(df['DatadaVenda'])
+        df['Ano'] = df['DatadaVenda'].dt.year
+        df['Mês'] = df['DatadaVenda'].dt.month
+
+        # Filtrar apenas os anos de 2022, 2023 e 2024
+        df_filtrado = df[df['Ano'].isin([2022, 2023, 2024])]
+
+        # Agrupar vendas por Ano, Mês e Corretor 1
+        df_grouped = df_filtrado.groupby(['Ano', 'Mês', 'Corretor1']).size().reset_index(name='Vendas')
+
+        # Codificar 'Corretor 1' para o modelo
+        df_grouped['Corretor_Cod'] = pd.factorize(df_grouped['Corretor1'])[0]
+
+        # Features e target
+        X = df_grouped[['Ano', 'Mês', 'Corretor_Cod']]
+        y = df_grouped['Vendas']
+
+        # Treinar modelo de Regressão Linear
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Criar dados para 2025 para cada Corretor
+        corretores = df_grouped['Corretor1'].unique()
+        meses = np.arange(1, 13)
+
+        # DataFrame para armazenar previsões de 2025
+        previsoes_2025 = pd.DataFrame()
+
+        for corretor in corretores:
+            corretor_cod = pd.factorize(df_grouped['Corretor1'])[0][df_grouped['Corretor1'] == corretor][0]
+            ano_2025 = np.full(12, 2025)
+            corretor_array = np.full(12, corretor_cod)
+
+            X_2025 = pd.DataFrame({
+                'Ano': ano_2025,
+                'Mês': meses,
+                'Corretor_Cod': corretor_array
+            })
+
+            pred_2025 = model.predict(X_2025)
+            
+            df_temp = pd.DataFrame({
+                'Ano': 2025,
+                'Mês': meses,
+                'Corretor1': corretor,
+                'Previsão_de_Vendas': pred_2025.astype(int)
+            })
+
+            previsoes_2025 = pd.concat([previsoes_2025, df_temp])
+
+        # Criar o gráfico apenas com previsões de 2025
+        st.title("Previsão de Vendas para 2025 por Corretor")
+        fig, ax = plt.subplots(figsize=(14, 7))
+
+        # Plotar apenas as previsões para 2025 por Corretor 1
+        for corretor in corretores:
+            df_pred = previsoes_2025[previsoes_2025['Corretor1'] == corretor]
+            ax.plot(df_pred['Mês'], df_pred['Previsão_de_Vendas'], marker='*', linestyle='--', label=f'2025 - {corretor}')
+            for i, value in enumerate(df_pred['Previsão_de_Vendas']):
+                ax.annotate(f'{value}', (df_pred['Mês'].values[i], value), textcoords="offset points", xytext=(0,10), ha='center')
+
+        # Configurar o gráfico
+        ax.set_xlabel('Mês')
+        ax.set_ylabel('Número de Vendas')
+        ax.set_title('Previsão de Vendas por Corretor - 2025')
+        ax.grid(True, linestyle='--', alpha=0.7)
+        ax.set_xticks(range(1, 13))
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+
+        # Posicionar legenda em duas linhas na parte superior interna do gráfico
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0.98), ncol=4, fontsize='small', frameon=False)
+
+        # Exibir o gráfico
+        st.pyplot(fig)
+
+        # Exibir tabela com previsões para 2025
+        st.write("Previsão de Vendas para 2025 por Corretor:")
+        st.dataframe(previsoes_2025)
+
+
+
+
+
+
+
+
+
+        # Remover espaços nos nomes das colunas
+        df.columns = df.columns.str.replace(' ', '')
+
+        # Análise inicial dos dados de vendas com GERENTE
+        st.title("Previsão de Vendas por GERENTE - 2026")
+
+        # Verificar valores nulos
+        nulos_data = df['DatadaVenda'].isnull().sum()
+        nulos_gerente = df['GERENTE'].isnull().sum()
+
+        # Verificar estatísticas básicas
+        df['Ano'] = df['DatadaVenda'].dt.year
+
+        # Remover registros com dados nulos em colunas essenciais
+        df = df.dropna(subset=['DatadaVenda', 'GERENTE'])
+
+        # Criar coluna para o mês
+        df['Mês'] = df['DatadaVenda'].dt.month
+
+        # Agrupar vendas por Ano, Mês e GERENTE
+        df_grouped = df.groupby(['Ano', 'Mês', 'GERENTE']).size().reset_index(name='Vendas')
+
+        # Codificar 'GERENTE' para o modelo
+        df_grouped['GERENTE_Cod'] = pd.factorize(df_grouped['GERENTE'])[0]
+
+        # Features e target
+        X = df_grouped[['Ano', 'Mês', 'GERENTE_Cod']]
+        y = df_grouped['Vendas']
+
+        # Treinar modelo de Regressão Linear
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Criar dados para 2026 para cada GERENTE
+        gerentes = df_grouped['GERENTE'].unique()
+        meses = np.arange(1, 13)
+
+        # DataFrame para armazenar previsões de 2026
+        previsoes_2026 = pd.DataFrame()
+
+        for gerente in gerentes:
+            gerente_cod = pd.factorize(df_grouped['GERENTE'])[0][df_grouped['GERENTE'] == gerente][0]
+            ano_2026 = np.full(12, 2026)
+            gerente_array = np.full(12, gerente_cod)
+
+            X_2026 = pd.DataFrame({
+                'Ano': ano_2026,
+                'Mês': meses,
+                'GERENTE_Cod': gerente_array
+            })
+
+            pred_2026 = model.predict(X_2026)
+            
+            df_temp = pd.DataFrame({
+                'Ano': 2026,
+                'Mês': meses,
+                'GERENTE': gerente,
+                'Previsão de Vendas': pred_2026.astype(int)
+            })
+
+            previsoes_2026 = pd.concat([previsoes_2026, df_temp])
+
+        # Criar o gráfico apenas com previsões de 2026
+        st.title("Previsão de Vendas para 2026 por GERENTE")
+        fig, ax = plt.subplots(figsize=(14, 7))
+
+        # Plotar apenas as previsões para 2026 por GERENTE
+        for gerente in gerentes:
+            df_pred = previsoes_2026[previsoes_2026['GERENTE'] == gerente]
+            ax.plot(df_pred['Mês'], df_pred['Previsão de Vendas'], marker='*', linestyle='--', label=f'2026 - {gerente}')
+            for i, value in enumerate(df_pred['Previsão de Vendas']):
+                ax.annotate(f'{value}', (df_pred['Mês'].values[i], value), textcoords="offset points", xytext=(0,10), ha='center')
+
+        # Configurar o gráfico
+        ax.set_xlabel('Mês')
+        ax.set_ylabel('Número de Vendas')
+        ax.set_title('Previsão de Vendas por GERENTE - 2026')
+        ax.grid(True, linestyle='--', alpha=0.7)
+        ax.set_xticks(range(1, 13))
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+
+        # Posicionar legenda em duas linhas na parte superior interna do gráfico
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0.98), ncol=4, fontsize='small', frameon=False)
+
+        # Exibir o gráfico
+        st.pyplot(fig)
+
+        # Exibir tabela com previsões para 2026
+        st.write("Previsão de Vendas para 2026 por GERENTE:")
+        st.dataframe(previsoes_2026)
+
+
+            
+
+
+
+
+        # Análise inicial dos dados de vendas com Campanha
+        st.title("Previsão de Vendas por Campanha - 2026 HG")
+
+        # Verificar valores nulos
+        nulos_data = df['DatadaVenda'].isnull().sum()
+        nulos_campanha = df['Campanha'].isnull().sum()
+
+        # Verificar estatísticas básicas
+        df['Ano'] = pd.to_datetime(df['DatadaVenda']).dt.year
+
+        # Remover registros com dados nulos em colunas essenciais
+        df = df.dropna(subset=['DatadaVenda', 'Campanha'])
+
+        # Criar coluna para o mês
+        df['Mês'] = pd.to_datetime(df['DatadaVenda']).dt.month
+
+        # Agrupar vendas por Ano, Mês e Campanha
+        df_grouped = df.groupby(['Ano', 'Mês', 'Campanha']).size().reset_index(name='Vendas')
+
+        # Codificar 'Campanha' para o modelo
+        df_grouped['Campanha Cod'], _ = pd.factorize(df_grouped['Campanha'])
+
+        # Features e target
+        X = df_grouped[['Ano', 'Mês', 'Campanha Cod']]
+        y = df_grouped['Vendas']
+
+        # Treinar modelo de Regressão Linear
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Criar dados para 2026 para cada Campanha
+        campanhas = df_grouped['Campanha'].unique()
+        meses = np.arange(1, 13)
+
+        # DataFrame para armazenar previsões de 2026
+        previsoes_2026 = pd.DataFrame()
+
+        for campanha in campanhas:
+            campanha_cod = df_grouped.loc[df_grouped['Campanha'] == campanha, 'Campanha Cod'].values[0]
+            ano_2026 = np.full(12, 2026)
+            campanha_array = np.full(12, campanha_cod)
+
+            X_2026 = pd.DataFrame({
+                'Ano': ano_2026,
+                'Mês': meses,
+                'Campanha Cod': campanha_array
+            })
+
+            pred_2026 = model.predict(X_2026)
+            
+            df_temp = pd.DataFrame({
+                'Ano': 2026,
+                'Mês': meses,
+                'Campanha': campanha,
+                'Previsão de Vendas': pred_2026.astype(int)
+            })
+
+            previsoes_2026 = pd.concat([previsoes_2026, df_temp], ignore_index=True)
+
+        # Criar o gráfico apenas com previsões de 2026
+        st.title("Previsão de Vendas para 2026 por Campanha")
+        fig, ax = plt.subplots(figsize=(14, 7))
+
+        # Plotar apenas as previsões para 2026 por Campanha
+        for campanha in campanhas:
+            df_pred = previsoes_2026[previsoes_2026['Campanha'] == campanha]
+            ax.plot(df_pred['Mês'], df_pred['Previsão de Vendas'], marker='*', linestyle='--', label=f'2026 - {campanha}')
+            for i, value in enumerate(df_pred['Previsão de Vendas']):
+                ax.annotate(f'{value}', (df_pred['Mês'].values[i], value), textcoords="offset points", xytext=(0,10), ha='center')
+
+        # Configurar o gráfico
+        ax.set_xlabel('Mês')
+        ax.set_ylabel('Número de Vendas')
+        ax.set_title('Previsão de Vendas por Campanha - 2026')
+        ax.grid(True, linestyle='--', alpha=0.7)
+        ax.set_xticks(range(1, 13))
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+
+        # Posicionar legenda em duas linhas na parte superior interna do gráfico
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0.98), ncol=4, fontsize='small', frameon=False)
+
+        # Exibir o gráfico
+        st.pyplot(fig)
+
+        # Exibir tabela com previsões para 2026
+        st.write("Previsão de Vendas para 2026 por Campanha:")
+        st.dataframe(previsoes_2026)
+
+
+
+
+
+
+
+###############################Previsão de vendas#############################
+
+
+
+
+
+        # Verificar valores nulos
+        nulos_data = df['DatadaVenda'].isnull().sum()
+        nulos_campanha = df['Campanha'].isnull().sum()
+        nulos_origem = df['Origemdavenda'].isnull().sum()
+
+        # Verificar estatísticas básicas
+        df['Ano'] = pd.to_datetime(df['DatadaVenda']).dt.year
+        df['Mês'] = pd.to_datetime(df['DatadaVenda']).dt.month
+        estatisticas_vendas = df.groupby(['Ano', 'Mês', 'Campanha', 'Origemdavenda']).size().reset_index(name='Total de Vendas')
+
+        # Exibir análise inicial
+        st.write(f"**Valores Nulos em 'DatadaVenda':** {nulos_data}")
+        st.write(f"**Valores Nulos em 'Campanha':** {nulos_campanha}")
+        st.write(f"**Valores Nulos em 'Origem da Venda':** {nulos_origem}")
+        st.write("**Total de Vendas por Ano, Mês, Campanha e Origem da Venda:**")
+        st.write(estatisticas_vendas)
+
+        # Remover registros com dados nulos em colunas essenciais
+        df = df.dropna(subset=['DatadaVenda', 'Campanha', 'Origemdavenda'])
+
+        # Agrupar vendas por Ano, Mês, Campanha e Origem da Venda
+        df_grouped = df.groupby(['Ano', 'Mês', 'Campanha', 'Origemdavenda']).size().reset_index(name='Vendas')
+
+        # Adicionar seletores
+        anos_disponiveis = ["Todos"] + sorted(df_grouped['Ano'].unique())
+        campanhas_disponiveis = ["Todas"] + sorted(df_grouped['Campanha'].unique())
+        origens_disponiveis = ["Todas"] + sorted(df_grouped['Origemdavenda'].unique())
+
+        ano_selecionado = st.selectbox("Selecione o Ano:", anos_disponiveis)
+        campanha_selecionada = st.selectbox("Selecione a Campanha:", campanhas_disponiveis)
+        origem_selecionada = st.selectbox("Selecione a Origem da Venda:", origens_disponiveis)
+
+        # Filtrar dados conforme seleções
+        df_filtrado = df_grouped.copy()
+        if ano_selecionado != "Todos":
+            df_filtrado = df_filtrado[df_filtrado['Ano'] == ano_selecionado]
+
+        if campanha_selecionada != "Todas":
+            df_filtrado = df_filtrado[df_filtrado['Campanha'] == campanha_selecionada]
+
+        if origem_selecionada != "Todas":
+            df_filtrado = df_filtrado[df_filtrado['Origemdavenda'] == origem_selecionada]
+
+        # Criar modelo de regressão baseado nos dados filtrados
+        if not df_filtrado.empty:
+            X_treino = df_filtrado[['Ano', 'Mês']]
+            y_treino = df_filtrado['Vendas']
+
+            model = LinearRegression()
+            model.fit(X_treino, y_treino)
+
+            # Criar previsões para 2025
+            meses = np.arange(1, 13)
+            ano_2025 = np.full(12, 2025)
+            X_2025 = pd.DataFrame({'Ano': ano_2025, 'Mês': meses})
+            previsoes_2025 = model.predict(X_2025)
+
+            # Criar DataFrame das previsões
+            df_previsoes_2025 = pd.DataFrame({'Ano': 2025, 'Mês': meses, 'Vendas Previstas': previsoes_2025.astype(int)})
+
+            # Criar gráfico atualizado conforme os filtros
+            st.title("Evolução Mensal das Vendas e Previsão para 2025")
+            fig, ax = plt.subplots(figsize=(14, 7))
+
+            for ano in df_filtrado['Ano'].unique():
+                df_ano = df_filtrado[df_filtrado['Ano'] == ano]
+                ax.plot(df_ano['Mês'], df_ano['Vendas'], marker='o', linestyle='-', label=f'Vendas {ano}')
+                for i, value in enumerate(df_ano['Vendas']):
+                    ax.annotate(f'{value}', (df_ano['Mês'].values[i], value), textcoords="offset points", xytext=(0,10), ha='center')
+
+            # Adicionar previsão de 2025
+            ax.plot(df_previsoes_2025['Mês'], df_previsoes_2025['Vendas Previstas'], marker='*', linestyle='--', color='red', label='Previsão 2025')
+            for i, value in enumerate(df_previsoes_2025['Vendas Previstas']):
+                ax.annotate(f'{value}', (df_previsoes_2025['Mês'].values[i], value), textcoords="offset points", xytext=(0,10), ha='center')
+
+            # Criar linha de tendência global
+            df_tendencia = df_filtrado.groupby('Mês')['Vendas'].mean().reset_index()
+            ax.plot(df_tendencia['Mês'], df_tendencia['Vendas'], linestyle='--', color='gray', label='Tendência Global')
+
+            # Configurar o gráfico
+            ax.set_xlabel('Mês')
+            ax.set_ylabel('Número de Vendas')
+            ax.set_title('Evolução das Vendas e Previsão para 2025')
+            ax.grid(True, linestyle='--', alpha=0.7)
+            ax.set_xticks(range(1, 13))
+            ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+            ax.legend()
+
+            # Exibir gráfico
+            st.pyplot(fig)
+
+            # Exibir tabela com previsões para 2025
+            st.write("Previsão de Vendas para 2025:")
+            st.dataframe(df_previsoes_2025)
+
+
+
+
+
+
+###############################Fim Previsão de vendas##########################
+            
+       
+
+
+    
 
         # Carregando o DataFrame
         df_data = pd.read_excel('BASERESGATE.xlsx')
@@ -3391,15 +4092,20 @@ if pagina == 'Previsão de Vendas':
             st.write("Totais:")
             total_vendido = df_filtrado["Valor vendido"].sum()
             st.write(f"Total Vendido: **R$ {total_vendido:,.2f}**")  # Formatação para moeda
+
+            # Criando o gráfico de barras para a coluna "Valor vendido" usando Plotly ou Matplotlib
+            import plotly.express as px
+            fig = px.bar(df_filtrado, x="Corretor 1", y="Valor vendido", title="Valor Vendido por Corretor")
+            st.plotly_chart(fig)
+
         else:
             st.error("A coluna 'Origem da venda' não foi encontrada no DataFrame.")
+
 
             
 
         #df_data
       
+        
 
 
-
-
-#############################################FIM##############################################
