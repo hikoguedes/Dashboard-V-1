@@ -556,14 +556,42 @@ if pagina == 'HOME':
 
         # _________________________________________________________________________________________#
 
-        # Filtrar os valores válidos de "Latencia de compra" (remover valores nulos ou inválidos)
+
+
+
+
+
+
+        # Supondo que df_filtrado já existe e contém a coluna "Latencia de compra"
+
+        # 1. Converter a coluna "Latencia de compra" para numérico
+        df_filtrado['Latencia de compra'] = pd.to_numeric(df_filtrado['Latencia de compra'], errors='coerce')
+
+        # 2. Filtrar os valores válidos (remover valores nulos ou inválidos)
         latencia_compra = df_filtrado['Latencia de compra'].dropna()
 
-        # Calcular a média e arredondar
-        media_latencia_compra = latencia_compra.mean()
+        # 3. Calcular a média
+        if not latencia_compra.empty:  # Verifica se há valores válidos
+            media_latencia_compra = latencia_compra.mean()
+        else:
+            media_latencia_compra = 0  # Define a média como 0 se não houver valores válidos
 
-        media_latencia_compra_arredondada = round(
-            np.nan_to_num(media_latencia_compra, nan=0))
+        # 4. Arredondar a média
+        media_latencia_compra_arredondada = round(np.nan_to_num(media_latencia_compra, nan=0))
+
+        # 5. Exibir o resultado no Streamlit
+        #st.write(f"Média da latência de compra: {media_latencia_compra_arredondada}")
+
+        # Mensagem de aviso se não houver valores válidos
+        if latencia_compra.empty:
+            st.warning("Não há valores válidos de latência de compra para calcular a média.")
+
+
+
+
+
+
+
 
         # Criar o histograma
         fig, ax = plt.subplots(figsize=(12, 6))  # Tamanho do gráfico ajustado
@@ -1244,9 +1272,9 @@ if pagina == 'HOME':
                     st.markdown(
                     f"""
                             <div class="card" style="background-color:#32CD32">
-                                <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">💰 VGV Total Bruto</span>
-                                <span style="color: white; font-size: 18px; font-weight: bold;">Total Assinados: {quant_assinado}</span>
-                                <span style="font-size: 20px; color: white; font-size: 20px; font-weight: bold;">{formatar_br(VGV_LIQUIDO)}</span>
+                                <span style="color: white; font-size: 1vw; font-weight: bold;">💰 VGV Total Bruto</span>
+                                <span style="color: white; font-size: 1vw; font-weight: bold;">Total Assinados: {quant_assinado}</span>
+                                <span style="color: white; font-size: 1vw; font-weight: bold;">{formatar_br(VGV_LIQUIDO)}</span>
 
                             </div>
                                                     """,
