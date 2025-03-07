@@ -128,7 +128,7 @@ if "df" not in st.session_state:
     # ============================
 
     # ✅ Caminho do arquivo
-    caminho_arquivo = "BASEOFICIAL0503.xlsx"  # Altere se necessário
+    caminho_arquivo = "BASEOFICIAL0703.xlsx"  # Altere se necessário
 
     # ✅ Carregar a planilha específica
     df = load_data(caminho_arquivo)
