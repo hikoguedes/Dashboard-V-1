@@ -128,7 +128,7 @@ if "df" not in st.session_state:
     # ============================
 
     # ✅ Caminho do arquivo
-    caminho_arquivo = "BASEOFICIAL0703.xlsx"  # Altere se necessário
+    caminho_arquivo = "PowerBi_Performance_vendas 20251703.xlsx"  # Altere se necessário
 
     # ✅ Carregar a planilha específica
     df = load_data(caminho_arquivo)
@@ -201,6 +201,7 @@ def initialize_variables():
         'percent_desconto_viabilidade': 0,
         'total_ganho_viabilidade': 0,
         'percent_ganho_viabilidade': 0,
+        'df_contratos' : 0,
         
         # Client Variables
         'total_clientes': 0,
@@ -246,10 +247,12 @@ vars = initialize_variables()
 
 
 
-
+st.sidebar.image("CEL1_Logo_RGB_PU_Positive-Transparent.png", width=150)
 
 # Criando o sidebar de navegação
 st.sidebar.title('Navegação')
+# Display company logo
+
 pagina = st.sidebar.radio('Selecione a página:', [
     'HOME',
     'RANKING',
@@ -558,8 +561,16 @@ if pagina == 'HOME':
 
 
 
+        # Filtrando as linhas onde 'Data da Venda' é igual a 'Pendente'
+        df_nao_assinado_TESTE = df_filtrado[df_filtrado['Data da Venda'] == 'Pendente']
 
+        # Somando os valores da coluna 'Valor vendido' para as linhas filtradas
+        soma_valor_vendido = df_nao_assinado_TESTE['Valor vendido'].sum()
 
+        # Contando a quantidade de linhas no DataFrame filtrado
+        quantidade_nao_assinado = df_nao_assinado_TESTE.shape[0]
+
+      
 
 
         # Supondo que df_filtrado já existe e contém a coluna "Latencia de compra"
@@ -610,18 +621,28 @@ if pagina == 'HOME':
 
 
 ###########################################tabela_avista############################################
+        # Filtrar apenas os registros com 'Tabela' igual a 'A vista'
         df_a_vista = df_filtrado[df_filtrado['Tabela'] == 'A vista']
+
         # Contando a quantidade de "ASSINADO" na coluna 'Status 1'
         quant_a_vista = df_a_vista.shape[0]
-
 
         # Aplicar as três condições na mesma expressão
         tabela_avista = df_filtrado[
             (df_filtrado['Status 1'] == 'ASSINADO') & 
             (df_filtrado['Status 2'] == 'ATIVO') & 
             (df_filtrado['Tabela'] == 'A vista')
-        ].shape[0]
+        ]
 
+        # Quantidade de registros que atendem às condições
+        quantidade_tabela_a_vista = tabela_avista.shape[0]
+
+        # Valor vendido dos registros que atendem às condições
+        valor_vendido_tabela_a_vista = tabela_avista['Valor vendido'].sum()
+
+        # Exibir resultados
+        #print(f"Quantidade de registros 'A vista' que atendem às condições: {quantidade_tabela_a_vista}")
+        #print(f"Valor vendido dos registros 'A vista' que atendem às condições: R$ {valor_vendido_tabela_a_vista:.2f}")
 
 
         # Calcula o percentual diretamente e armazena na variável
@@ -633,14 +654,30 @@ if pagina == 'HOME':
             ].shape[0] / df_filtrado.shape[0] * 100
         ) if df_filtrado.shape[0] > 0 else 0
 
+############################################Tabela Curta####################################################
 
+        # Filtrar apenas os registros com 'Tabela' igual a 'Curta'
+        df_curta = df_filtrado[df_filtrado['Tabela'] == 'Curta']
+
+        # Contando a quantidade de registros 'Curta'
+        quant_curta = df_curta.shape[0]
 
         # Aplicar as três condições na mesma expressão
         tabela_curta = df_filtrado[
             (df_filtrado['Status 1'] == 'ASSINADO') & 
             (df_filtrado['Status 2'] == 'ATIVO') & 
             (df_filtrado['Tabela'] == 'Curta')
-        ].shape[0]
+        ]
+
+        # Quantidade de registros que atendem às condições
+        quantidade_tabela_curta = tabela_curta.shape[0]
+
+        # Valor vendido dos registros que atendem às condições
+        valor_vendido_tabela_curta = tabela_curta['Valor vendido'].sum()
+
+        # Exibir resultados
+        #print(f"Quantidade de registros 'Curta' que atendem às condições: {quantidade_tabela_curta}")
+        #print(f"Valor vendido dos registros 'Curta' que atendem às condições: R$ {valor_vendido_tabela_curta:.2f}")
 
 
 
@@ -653,14 +690,30 @@ if pagina == 'HOME':
             ].shape[0] / df_filtrado.shape[0] * 100
         ) if df_filtrado.shape[0] > 0 else 0
 
+#######################################Tabela Longa#################################################
 
+        # Filtrar apenas os registros com 'Tabela' igual a 'Longa'
+        df_longa = df_filtrado[df_filtrado['Tabela'] == 'Longa']
 
-                # Aplicar as três condições na mesma expressão
+        # Contando a quantidade de registros 'Longa'
+        quant_longa = df_longa.shape[0]
+
+        # Aplicar as três condições na mesma expressão
         tabela_longa = df_filtrado[
             (df_filtrado['Status 1'] == 'ASSINADO') & 
             (df_filtrado['Status 2'] == 'ATIVO') & 
             (df_filtrado['Tabela'] == 'Longa')
-        ].shape[0]
+        ]
+
+        # Quantidade de registros que atendem às condições
+        quantidade_tabela_longa = tabela_longa.shape[0]
+
+        # Valor vendido dos registros que atendem às condições
+        valor_vendido_tabela_longa = tabela_longa['Valor vendido'].sum()
+
+        # Exibir resultados
+        #print(f"Quantidade de registros 'Longa' que atendem às condições: {quantidade_tabela_longa}")
+        #print(f"Valor vendido dos registros 'Longa' que atendem às condições: R$ {valor_vendido_tabela_longa:.2f}")
 
 
                 # Calcula o percentual diretamente e armazena na variável
@@ -672,14 +725,30 @@ if pagina == 'HOME':
             ].shape[0] / df_filtrado.shape[0] * 100
         ) if df_filtrado.shape[0] > 0 else 0
 
+#######################################Tabela Longuisima#################################################
 
+ # Filtrar apenas os registros com 'Tabela' igual a 'Longuissima'
+        df_Longuissima = df_filtrado[df_filtrado['Tabela'] == 'Longuissima']
 
-                # Aplicar as três condições na mesma expressão
-        tabela_longuissima = df_filtrado[
+        # Contando a quantidade de registros 'Longa'
+        quant_Longuissima = df_Longuissima.shape[0]
+
+        # Aplicar as três condições na mesma expressão
+        tabela_Longuissima = df_filtrado[
             (df_filtrado['Status 1'] == 'ASSINADO') & 
             (df_filtrado['Status 2'] == 'ATIVO') & 
             (df_filtrado['Tabela'] == 'Longuissima')
-        ].shape[0]
+        ]
+
+        # Quantidade de registros que atendem às condições
+        quantidade_tabela_Longuissima = tabela_Longuissima.shape[0]
+
+        # Valor vendido dos registros que atendem às condições
+        valor_vendido_tabela_Longuissima = tabela_Longuissima['Valor vendido'].sum()
+
+        # Exibir resultados
+        #print(f"Quantidade de registros 'Longa' que atendem às condições: {quantidade_tabela_Longuissima}")
+        #print(f"Valor vendido dos registros 'Longa' que atendem às condições: R$ {valor_vendido_tabela_Longuissima:.2f}")
 
 
 
@@ -693,88 +762,116 @@ if pagina == 'HOME':
         ) if df_filtrado.shape[0] > 0 else 0
 
 
-
-
-                # Aplicar as três condições na mesma expressão
+##############################################################################################################################
+        # Primeiro filtra pelas condições básicas com "Tipo unidade semanas" igual a "Integral" ou "INTEGRAL"
         tabela_integral = df_filtrado[
-            (df_filtrado['Status 1'] == 'ASSINADO') & 
-            (df_filtrado['Status 2'] == 'ATIVO') & 
-            (df_filtrado['Tipo unidade semanas'] == 'Integral')& 
-            (df_filtrado['# Clientes'] == 1)
-        ].shape[0]
+            (df_filtrado['Status 1'] == 'ASSINADO') &
+            (df_filtrado['Status 2'] == 'ATIVO') &
+            (df_filtrado['Tipo unidade semanas'].astype(str).str.lower().str.strip() == 'integral')  # Comparação corrigida
+        ]
+    
+
+        # 1. Quantidade de produtos únicos
+        produtos_unicos = tabela_integral['PRODUTO'].drop_duplicates().shape[0]
+
+        # 2. Valor total vendido
+        valor_total_vendido_integral = tabela_integral['Valor vendido'].sum()
+
+        # 3. Percentual em relação ao valor total vendido (se houver um valor total de referência)
+        # Aqui, o percentual é calculado em relação ao valor total vendido dos produtos filtrados
+        percentual_valor_total_vendido_integral = (valor_total_vendido_integral / df_filtrado['Valor vendido'].sum()) * 100
+
+        # Exibir resultados
+        print(f"Quantidade de produtos únicos que atendem às condições: {produtos_unicos}")
+        print(f"Valor total vendido: R$ {valor_total_vendido_integral:.2f}")
+        print(f"Percentual em relação ao valor total vendido: {percentual_valor_total_vendido_integral:.2f}%")
+
+###########################################################################################################################
+
+            # Primeiro filtra pelas condições básicas com "Tipo unidade semanas" igual a 4
+        tabela_semanas_4 = df_filtrado[
+            (df_filtrado['Status 1'] == 'ASSINADO') &
+            (df_filtrado['Status 2'] == 'ATIVO') &
+            (df_filtrado['Tipo unidade semanas'] == 4)
+        ]
+
+        # Conta combinações únicas Cliente + Corretor + Produto após o filtro
+        quantidade_unica_cliente_corretor_produto_4 = tabela_semanas_4.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO']).ngroups
+
+        # Calcula o valor vendido total para as combinações únicas
+        valor_vendido_total_4 = tabela_semanas_4.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO'])['Valor vendido'].sum().sum()
+
+        # Conta o total de combinações únicas Cliente + Corretor + Produto no dataframe completo (sem filtro)
+        total_unica_cliente_corretor_produto = df_filtrado.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO']).ngroups
+
+        # Calcula o percentual
+        percentual_unicos_cliente_corretor_produto_4 = (
+            (quantidade_unica_cliente_corretor_produto_4 / total_unica_cliente_corretor_produto) * 100
+            if total_unica_cliente_corretor_produto > 0 else 0
+        )
+
+        # Exibe os resultados
+        #print(f'Total combinações únicas filtradas ("4"): {quantidade_unica_cliente_corretor_produto_4}')
+        #print(f'Valor Vendido Total ("4"): {valor_vendido_total_4:.2f}')
+        #print(f'Percentual: {percentual_unicos_cliente_corretor_produto_4:.2f}%')
 
 
-                # Calcula o percentual diretamente e armazena na variável
-        percentual_tabela_Integral = (
-            df_filtrado[
-                (df_filtrado['Status 1'] == 'ASSINADO') & 
-                (df_filtrado['Status 2'] == 'ATIVO') & 
-                (df_filtrado['Tipo unidade semanas'] == 'Integral')& 
-                (df_filtrado['# Clientes'] == 1)
-            ].shape[0] / df_filtrado.shape[0] * 100
-        ) if df_filtrado.shape[0] > 0 else 0
+################################################################################################################
 
+                # Primeiro filtra pelas condições básicas com "Tipo unidade semanas" igual a 6
+        tabela_semanas_6 = df_filtrado[
+            (df_filtrado['Status 1'] == 'ASSINADO') &
+            (df_filtrado['Status 2'] == 'ATIVO') &
+            (df_filtrado['Tipo unidade semanas'] == 6)
+        ]
 
-                # Aplicar as três condições na mesma expressão
-        tabela_quatro_semanas = df_filtrado[
-            (df_filtrado['Status 1'] == 'ASSINADO') & 
-            (df_filtrado['Status 2'] == 'ATIVO') & 
-            (df_filtrado['Tipo unidade semanas'] == 4)& 
-            (df_filtrado['# Clientes'] == 1)
-        ].shape[0]
+        # Conta a quantidade de combinações únicas Cliente + Corretor 1 + PRODUTO após o filtro
+        quantidade_unica_cliente_corretor_produto_6 = tabela_semanas_6.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO']).ngroups
 
+        # Calcula o valor vendido total para as combinações únicas
+        valor_vendido_total_6 = tabela_semanas_6.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO'])['Valor vendido'].sum().sum()
 
-                # Calcula o percentual diretamente e armazena na variável
-        percentual_tabela_quatro_semanas = (
-            df_filtrado[
-                (df_filtrado['Status 1'] == 'ASSINADO') & 
-                (df_filtrado['Status 2'] == 'ATIVO') & 
-                (df_filtrado['Tipo unidade semanas'] == 4)& 
-                (df_filtrado['# Clientes'] == 1)
-            ].shape[0] / df_filtrado.shape[0] * 100
-        ) if df_filtrado.shape[0] > 0 else 0
+        # Conta o total de combinações únicas de Cliente + Corretor 1 + PRODUTO no dataframe completo (sem filtro)
+        total_unica_cliente_corretor_produto = df_filtrado.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO']).ngroups
 
+        # Calcula o percentual
+        percentual_unico_cliente_corretor_produto_6 = (
+            (quantidade_unica_cliente_corretor_produto_6 / total_unica_cliente_corretor_produto) * 100
+            if total_unica_cliente_corretor_produto > 0 else 0
+        )
 
-                # Aplicar as três condições na mesma expressão
-        tabela_seis_semanas = df_filtrado[
-            (df_filtrado['Status 1'] == 'ASSINADO') & 
-            (df_filtrado['Status 2'] == 'ATIVO') & 
-            (df_filtrado['Tipo unidade semanas'] == 6)& 
-            (df_filtrado['# Clientes'] == 1)
-        ].shape[0]
+        # Exibe os resultados
+        #print(f'Total combinações únicas filtradas ("6"): {quantidade_unica_cliente_corretor_produto_6}')
+        #print(f'Valor Vendido Total ("6"): {valor_vendido_total_6:.2f}')
+        #print(f'Percentual: {percentual_unico_cliente_corretor_produto_6:.2f}%')
+######################################################################################################################
 
+            # Primeiro filtra pelas condições básicas com "Tipo unidade semanas" igual a 13
+        tabela_semanas_13 = df_filtrado[
+            (df_filtrado['Status 1'] == 'ASSINADO') &
+            (df_filtrado['Status 2'] == 'ATIVO') &
+            (df_filtrado['Tipo unidade semanas'] == 13)
+        ]
 
-                # Calcula o percentual diretamente e armazena na variável
-        percentual_tabela_seis_semanas = (
-            df_filtrado[
-                (df_filtrado['Status 1'] == 'ASSINADO') & 
-                (df_filtrado['Status 2'] == 'ATIVO') & 
-                (df_filtrado['Tipo unidade semanas'] == 6)& 
-                (df_filtrado['# Clientes'] == 1)
-            ].shape[0] / df_filtrado.shape[0] * 100
-        ) if df_filtrado.shape[0] > 0 else 0
+        # Conta a quantidade de combinações únicas Cliente + Corretor 1 + Produto após o filtro
+        quantidade_unica_cliente_corretor_produto_13 = tabela_semanas_13.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO']).ngroups
 
+        # Calcula o valor vendido total para as combinações únicas
+        valor_vendido_total_13 = tabela_semanas_13.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO'])['Valor vendido'].sum().sum()
 
+        # Conta o total dessas combinações no dataframe completo (sem filtro)
+        total_unica_cliente_corretor_produto = df_filtrado.groupby(['CLIENTE', 'Corretor 1', 'PRODUTO']).ngroups
 
-                # Aplicar as três condições na mesma expressão
-        tabela_treze_semanas = df_filtrado[
-            (df_filtrado['Status 1'] == 'ASSINADO') & 
-            (df_filtrado['Status 2'] == 'ATIVO') & 
-            (df_filtrado['Tipo unidade semanas'] == 13)& 
-            (df_filtrado['# Clientes'] == 1)
-        ].shape[0]
+        # Calcula o percentual dessas combinações únicas
+        percentual_unico_cliente_corretor_produto_13 = (
+            (quantidade_unica_cliente_corretor_produto_13 / total_unica_cliente_corretor_produto) * 100
+            if total_unica_cliente_corretor_produto > 0 else 0
+        )
 
-
-                # Calcula o percentual diretamente e armazena na variável
-        percentual_tabela_treze_semanas = (
-            df_filtrado[
-                (df_filtrado['Status 1'] == 'ASSINADO') & 
-                (df_filtrado['Status 2'] == 'ATIVO') & 
-                (df_filtrado['Tipo unidade semanas'] == 13)& 
-                (df_filtrado['# Clientes'] == 1)
-            ].shape[0] / df_filtrado.shape[0] * 100
-        ) if df_filtrado.shape[0] > 0 else 0
-
+        # Exibe os resultados
+    #print(f'Total de combinações únicas (Cliente + Corretor + Produto): {quantidade_unica_cliente_corretor_produto_13}')
+     #   print(f'Valor Vendido Total ("13"): {valor_vendido_total_13:.2f}')
+      #  print(f'Percentual: {percentual_unico_cliente_corretor_produto_13:.2f}%')
 
 
 
@@ -931,9 +1028,41 @@ if pagina == 'HOME':
         total_follow_ups = int(total_follow_ups)
 
         # _____________________________________________________________________________________#
+                
+                
+        # Converte valores inválidos para NaN, e então calcula a média
+        df_filtrado['De Entrada'] = pd.to_numeric(df_filtrado['De Entrada'], errors='coerce')
+
+        media = df_filtrado['De Entrada'].mean()
+
+        if pd.isna(media):
+            media_entrada = 0
+        else:
+            media_entrada = round(media * 100)
+
 
         # _____________________________________________________________________________________#
 
+           
+
+        # Garanta que a coluna 'Vendas' esteja em formato string e padronizada
+        df['Vendas'] = df['Vendas'].astype(str).str.replace('%', '', regex=False).str.strip().str.lower()
+
+        # Garanta que 'Valor vendido' seja numérico, convertendo valores inválidos em NaN
+        df['Valor vendido'] = pd.to_numeric(df['Valor vendido'], errors='coerce')
+
+        # Filtra os registros onde a coluna 'Vendas' é igual a 'pendente'
+        pendentes = df[df['Vendas'] == 'pendente']
+
+        # Soma dos valores da coluna 'Valor vendido' para vendas pendentes
+        soma_valor_pendente = pendentes['Valor vendido'].sum()
+
+        # Exibindo resultados
+        #print(f"Quantidade de vendas pendentes: {pendentes.shape[0]}")
+        #print(f"Soma total das vendas pendentes: {soma_valor_pendente:.2f}")
+
+
+#################################################################################################
         # Converter a coluna 'N de FU' para numérico no DataFrame filtrado
         df_filtrado['De Entrada'] = pd.to_numeric(
             df_filtrado['De Entrada'], errors='coerce')
@@ -1069,10 +1198,6 @@ if pagina == 'HOME':
      
 
 
-
-       
-
-
             # Filtrar os registros onde "Status 1" é "ASSINADO" e "Status 2" é "CANCELADO"
         df_distrato_up_grade = df_filtrado[(df_filtrado["Status 1"] == "ASSINADO") & (df_filtrado["Status 2"] == "CANCELADO UPGRADE")]
 
@@ -1124,8 +1249,6 @@ if pagina == 'HOME':
             TICKET_MEDIO = 0  # Evita divisão por zero
         
 
-      
-
 
 ###################################DISTRATO#####################################
 
@@ -1139,44 +1262,35 @@ if pagina == 'HOME':
                                     (df_filtrado['Status 2'] == 'CANCELADO UPGRADE')].shape[0]
 ################################################################################
 
-        # Exibir o resultado
-        #print(f"Soma da coluna 'De Entrada': {soma_percentual_entrada:.2f}%")
-        # Remover valores nulos antes da análise
-        #df_percentual_entrada = df_filtrado["De Entrada"].dropna()
-
-        # Analisar os valores da coluna "De Entrada" sem filtros adicionais
-        #percentual_entrada_descricao_filtrado = {
-            #df_percentual_entrada.mean(),
-            #"Mediana": df_percentual_entrada.median(),
-           # "Mínimo": df_percentual_entrada.min(),
-           # "Máximo": df_percentual_entrada.max(),
-           # "Desvio Padrão": df_percentual_entrada.std()
-        #}
-
-        #percentual_entrada_descricao_filtrado = int(percentual_entrada_descricao_filtrado)
-
-        #percentual_media_inteiro = int(percentual_entrada_descricao_filtrado["Média"])
-        #percentual_entrada_descricao_filtrado = {key: int(value) for key, value in percentual_entrada_descricao_filtrado.items()}
-        #percentual_entrada_descricao_filtrado = {key: int(value) for key, value in percentual_entrada_descricao_filtrado.items()}
-        #percentual_entrada_descricao_filtrado = dict(percentual_entrada_descricao_filtrado)
+     
 
 
+# Re-executando corretamente após o reset do ambiente (sem uso de ferramentas externas)
+
+
+        # Calculando totais
+        total_ganho_viabilidade = df_filtrado['Ganho Viabilidade'].sum(min_count=1)
+        total_desconto_viabilidade = df_filtrado['Desconto Real Viabilidade'].sum(min_count=1)
+
+        # Total geral
+        total_geral = total_ganho_viabilidade + total_desconto_viabilidade
+
+        # Calculando percentuais
+        percentual_ganho_viabilidade = (total_ganho_viabilidade / total_geral) * 100 if total_geral else 0
+        percentual_desconto_viabilidade = (total_desconto_viabilidade / total_geral) * 100 if total_geral else 0
+
+        # Resultado em um DataFrame
+        resultado_final = pd.DataFrame({
+            "Coluna": ["Ganho Viabilidade", "Desconto Real Viabilidade"],
+            "Total": [total_ganho_viabilidade, total_desconto_viabilidade],
+            "Percentual (%)": [percentual_ganho_viabilidade, percentual_desconto_viabilidade]
+        })
+
+        resultado_final
+
+
+         # _____________________________________________________________________________________#
         # _____________________________________________________________________________________#
-
-        # _____________________________________________________________________________________#
-
-        # Agrupando por 'CLIENTES' e contando a quantidade de registros para cada cliente
-        # clientes_agrupados = df.groupby('CLIENTE').size().reset_index(name='Total')
-        # Agrupando por 'CLIENTES' e contando a quantidade de registros para cada cliente
-        # Contando o número de clientes distintos
-        # Agora o total_clientes irá variar com os filtros aplicados
-        # Contando os clientes únicos no df_filtrado
-        #total_clientes = df_filtrado['# Clientes'].nunique()
-   # Somar os valores maiores que 0 na coluna "# Clientes"
-        # Somar apenas os valores maiores que 0 na coluna "# Clientes"
-        
-        #soma_clientes_coluna
-
 
 
         Ticket = VGV_LIQUIDO / total_clientes_filtrado
@@ -1263,7 +1377,30 @@ if pagina == 'HOME':
                             return f"R$ {VGV_REALIZADO:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
                     def formatar_br(DESCONTO_REAL_VIABILIDADE):
                             return f"R$ {DESCONTO_REAL_VIABILIDADE:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                    def formatar_br(soma_valor_pendente):
+                            return f"R$ {soma_valor_pendente:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                    
+                    def formatar_br(valor_vendido_total_integral):
+                            return f"R$ {valor_vendido_total_integral:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                     
+                    def formatar_br(valor_vendido_total_4):
+                            return f"R$ {valor_vendido_total_4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
+
+                    def formatar_br(valor_vendido_total_6):
+                            return f"R$ {valor_vendido_total_6:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+                    
+                    def formatar_br(valor_vendido_total_13):
+                            return f"R$ {valor_vendido_total_13:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                    def formatar_br(valor_vendido_tabela_a_vista):
+                            return f"R$ {valor_vendido_tabela_a_vista:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                    def formatar_br(valor_vendido_tabela_curta):
+                            return f"R$ {valor_vendido_tabela_curta:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                    def formatar_br(valor_vendido_tabela_longa):
+                            return f"R$ {valor_vendido_tabela_longa:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+                    def formatar_br(valor_vendido_tabela_longa):
+                            return f"R$ {valor_vendido_tabela_longa:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
               
 #<span style="font-size: 8px;">R$ {formatar_br(ultimo_valor)}</span>
@@ -1286,8 +1423,8 @@ if pagina == 'HOME':
                     f"""
                         <div class="card" style="background-color:#32CD32">
                             <span style="color: white; font-size: 14px; font-weight: bold;">💰 VGV Total Bruto</span>
-                             <span style="font-size: 18px; color: white;">Pendente Assinatura: {quant_nao_assinado}</span>
-                            <span style="font-size: 20px; color: white;">{formatar_br(VGV_LIQUIDO)}</span>
+                             <span style="font-size: 18px; color: white;">Pendente Assinatura: {pendentes.shape[0]}</span>
+                            <span style="font-size: 20px; color: white;">{formatar_br(soma_valor_pendente)}</span>
                            
                             
                             
@@ -1323,7 +1460,8 @@ if pagina == 'HOME':
                     f"""
                         <div class="card" style="background-color:#32CD32">
                             <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">TABELA A VISTA (4M)</span>
-                            <span style="font-size: 20px; color: white;">{tabela_avista}</span>
+                            <span style="font-size: 20px; color: white;">{quantidade_tabela_a_vista}</span>
+                            <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_tabela_a_vista)}</span>
                             <span style="font-size: 20px; color: white;">{percentual_tabela_avista:.2f}%</span>
                         </div>
                         """,
@@ -1339,7 +1477,7 @@ if pagina == 'HOME':
                     f"""
                         <div class="card" style="background-color:#32CD32">
                             <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">VGV TOTAL LÍQUIDO</span>
-                            <span style="font-size: 20px; color: white; font-size: 20px;">R$ {formatar_br(VGV_BRUTO)}</span>
+                            <span style="font-size: 20px; color: white; font-size: 20px;">{formatar_br(VGV_BRUTO)}</span>
                             
                         </div>
                         """,
@@ -1351,7 +1489,7 @@ if pagina == 'HOME':
                     f"""
                         <div class="card" style="background-color:#32CD32">
                             <span style="color: white; font-size: 14px; font-weight: bold;">VGV Total Liquido</span>
-                            <span style="font-size: 14px; color: white;">R$ {formatar_br(VGV_BRUTO)}</span>
+                            <span style="font-size: 14px; color: white;">{formatar_br(VGV_BRUTO)}</span>
                             <span style="font-size: 20px; color: white;">Total Assinados: {quant_assinado_Cliente}</span>
                         </div>
                         """,
@@ -1386,7 +1524,8 @@ if pagina == 'HOME':
                     f"""
                         <div class="card" style="background-color:#32CD32">
                             <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">TABELA CURTA (35M)</span>
-                            <span style="font-size: 20px; color: white;">{tabela_curta}</span>
+                            <span style="font-size: 20px; color: white;">{quantidade_tabela_curta}</span>
+                            <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_tabela_curta)}</span>
                             <span style="font-size: 20px; color: white;">{percentual_tabela_curta:.2f}%</span>
                         </div>
                         """,
@@ -1414,7 +1553,7 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📊 DESCONTOS FINANCEIROS</span>
-                        <span style="font-size: 20px; color: white;">R$ {formatar_br(total_desconto_financeiro)}</span>
+                        <span style="font-size: 20px; color: white;">{formatar_br(total_desconto_financeiro)}</span>
                         <span style="font-size: 20px; color: white;">{percent_desconto_financeiro:.2f}%</span>
                     </div>
                     """,
@@ -1426,8 +1565,9 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                             <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📆INTEGRAL</span>
-                            <span style="font-size: 20px; color: white;">{tabela_integral}</span>
-                            <span style="font-size: 20px; color: white;">{percentual_tabela_Integral:.2f}%</span>
+                            <span style="font-size: 20px; color: white;">{produtos_unicos}</span>
+                              <span style="font-size: 20px; color: white;">{formatar_br(valor_total_vendido_integral)}</span>
+                            <span style="font-size: 20px; color: white;">{percentual_valor_total_vendido_integral:.2f}%</span>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -1451,7 +1591,8 @@ if pagina == 'HOME':
                         f"""
                     <div class="card" style="background-color:#32CD32">
                             <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">TABELA LONGA (60M)</span>
-                            <span style="font-size: 20px; color: white;">{tabela_longa}</span>
+                            <span style="font-size: 20px; color: white;">{quantidade_tabela_longa}</span>
+                            <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_tabela_longa)}</span>
                             <span style="font-size: 20px; color: white;">{percentual_tabela_longa:.2f}%</span>
                     </div>
                     """,
@@ -1478,7 +1619,7 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📊 DESCONTO REAL VIABILIDADE</span>
-                        <span style="font-size: 20px; color: white;">R$ {formatar_br(DESCONTO_REAL_VIABILIDADE)}</span>
+                        <span style="font-size: 20px; color: white;">{formatar_br(DESCONTO_REAL_VIABILIDADE)}</span>
                         <span style="font-size: 20px; color: white;">{percentual_desconto_real_viabilidade:.2f}%</span>
                     </div>
                     """,
@@ -1490,8 +1631,9 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📆 4 SEMANAS</span>
-                        <span style="font-size: 20px; color: white;">{tabela_quatro_semanas}</span>
-                        <span style="font-size: 20px; color: white;">{percentual_tabela_quatro_semanas:.2f}%</span>
+                        <span style="font-size: 20px; color: white;">{quantidade_unica_cliente_corretor_produto_4}</span>
+                        <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_total_4)}</span>
+                        <span style="font-size: 20px; color: white;">{percentual_unicos_cliente_corretor_produto_4:.2f}%</span>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -1515,7 +1657,8 @@ if pagina == 'HOME':
                         f"""
                     <div class="card" style="background-color:#32CD32">
                             <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">TABELA LONG+ (>60M)</span>
-                            <span style="font-size: 20px; color: white;">{tabela_longuissima}</span>
+                            <span style="font-size: 20px; color: white;">{quantidade_tabela_Longuissima}</span>
+                            <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_tabela_longa)}</span>
                             <span style="font-size: 20px; color: white;">{percentual_tabela_longuissima:.2f}%</span>
                     </div>
                     """,
@@ -1543,7 +1686,7 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📊 GANHO VIABILIDADE</span>
-                        <span style="font-size: 20px; color: white;">R$ {formatar_br(total_ganho_viabilidade)}</span>
+                        <span style="font-size: 20px; color: white;">{formatar_br(total_ganho_viabilidade)}</span>
                         <span style="font-size: 20px; color: white;">{percent_ganho_viabilidade}%</span>
                     </div>
                     """,
@@ -1555,8 +1698,9 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📆 6 SEMANAS</span>
-                        <span style="font-size: 20px; color: white;">{tabela_seis_semanas}</span>
-                        <span style="font-size: 20px; color: white;">{percentual_tabela_seis_semanas:.2f}%</span>
+                        <span style="font-size: 20px; color: white;">{quantidade_unica_cliente_corretor_produto_6}</span>
+                        <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_total_6)}</span>
+                        <span style="font-size: 20px; color: white;">{percentual_unico_cliente_corretor_produto_6:.2f}%</span>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -1565,9 +1709,10 @@ if pagina == 'HOME':
             with col28:
                 st.markdown(
                     f"""
-                    <div class="card" style="background-color:#12172b">
+                    <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📆 % MÉDIO DE ENTRADA</span>
-                        <span style="font-size: 20px; color: white;">{TICKET_MEDIO:.2f}%</span>
+                       <span style="font-size: 20px; color: white;">{media_entrada:.2f}%</span>
+
 
                     </div>
                     """,
@@ -1593,11 +1738,22 @@ if pagina == 'HOME':
             with col26:
                 st.markdown(
                     f"""
-                    <div class="card" style="background-color:#12172b">
-                        <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📊 RELATÓRIO COMPLETO</span>
-                        <span style="font-size: 20px; color: white;">R$ {formatar_br(valor_final)}</span>
-                        <span style="font-size: 20px; color: white;">Total Assinados: {quant_assinado}</span>
-                        <span style="font-size: 20px; color: white;">Descontos Aplicados:{formatar_br(total_desconto_financeiro)}</span>
+                    <div style="display: flex; justify-content: space-evenly; gap: 5px; background-color:#32CD32; padding:10px; border-radius:8px;">
+
+                    <!-- Coluna Ganho Viabilidade -->
+                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                        <span style="color: white; font-size: 14px; font-weight: bold;">📊 GANHO VIABILIDADE</span>
+                        <span style="font-size: 15px; color: white;">{formatar_br(total_ganho_viabilidade)}</span>
+                        <span style="font-size: 15px; color: white;">{percentual_ganho_viabilidade:.2f}%</span>
+                    </div>
+
+                    <!-- Coluna Perda Viabilidade -->
+                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                        <span style="font-size: 14px; color: white; font-weight: bold;">📊 PERDA VIABILIDADE</span>
+                        <span style="font-size: 15px; color: white;">{formatar_br(total_desconto_viabilidade)}</span>
+                        <span style="font-size: 15px; color: white;">{percentual_desconto_viabilidade:.2f}%</span>
+                    </div>
+
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -1608,8 +1764,9 @@ if pagina == 'HOME':
                     f"""
                     <div class="card" style="background-color:#32CD32">
                         <span style="font-size: 20px; color: white; font-size: 14px; font-weight: bold;">📆 13 SEMANAS</span>
-                        <span style="font-size: 20px; color: white;">{tabela_treze_semanas}</span>
-                        <span style="font-size: 20px; color: white;">{percentual_tabela_treze_semanas:.2f}%</span>
+                        <span style="font-size: 20px; color: white;">{quantidade_unica_cliente_corretor_produto_13}</span>
+                         <span style="font-size: 20px; color: white;">{formatar_br(valor_vendido_total_13)}</span>
+                        <span style="font-size: 20px; color: white;">{percentual_unico_cliente_corretor_produto_13:.2f}%</span>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -1625,6 +1782,486 @@ if pagina == 'RANKING':
     st.title('📈 RANKING')
     if not df_filtrado.empty:
 
+###########################################################################################
+
+        import streamlit as st
+        import pandas as pd
+        import os
+
+        # Display company logo
+        st.image("CEL1_Logo_RGB_PU_Positive-Transparent.png", width=200)
+
+        # Title
+        st.title("Top #5 Corretores")
+
+        # Processar dados para o ranking
+        df_filtrado['Valor vendido'] = pd.to_numeric(df_filtrado['Valor vendido'], errors='coerce')
+        df_filtrado['Desconto Financeiro'] = pd.to_numeric(df_filtrado['Desconto Financeiro'], errors='coerce')
+        df_filtrado['# Clientes'] = pd.to_numeric(df_filtrado['# Clientes'], errors='coerce')
+
+        # Garantir que 'Data da Venda' é datetime
+        df_filtrado['Data da Venda'] = pd.to_datetime(df_filtrado['Data da Venda'], errors='coerce')
+
+        # Removendo valores nulos antes de agrupar
+        df_filtrado = df_filtrado.dropna(subset=['Valor vendido', 'Data da Venda'])
+
+        # Agrupamento de dados corrigido
+        top_sellers = df_filtrado.groupby('Corretor 1').agg({
+            'Valor vendido': 'sum',
+            'Desconto Financeiro': 'sum',
+            'Data da Venda': lambda x: x.max(),
+            '# Clientes': 'count'
+        }).reset_index()
+
+        # Renomear colunas para facilitar a manipulação
+        top_sellers.columns = ['name', 'Valor vendido', 'Desconto Financeiro', 'Data da Venda', '# Clientes']
+
+        # Ordenar e selecionar o top 5
+        top_sellers = top_sellers.sort_values('Valor vendido', ascending=False).head(5)
+
+        # Cálculos adicionais
+        top_sellers['rank'] = range(1, len(top_sellers) + 1)
+        top_sellers['author_percent'] = (top_sellers['Valor vendido'] / top_sellers['Valor vendido'].sum() * 100).round(0)
+        top_sellers['Valor vendido'] = (top_sellers['Valor vendido'] / 1000).round(0)
+        top_sellers['Data da Venda'] = top_sellers['Data da Venda'].dt.strftime('%d/%m/%Y')
+
+        # Função para buscar a imagem do corretor
+        def get_corretor_image(name):
+            caminho = f"imagens_corretores/{name}.png"
+            return caminho if os.path.isfile(caminho) else "imagens_corretores/default.png"
+
+        # Função para definir a medalha
+        def get_medal(rank):
+            if rank == 1:
+                return "🥇"
+            elif rank == 2:
+                return "🥈"
+            elif rank == 3:
+                return "🥉"
+            elif rank == 4:
+                return "🏅 Destaque"
+            elif rank == 5:
+                return "🎖️ Destaque"
+            else:
+                return ""
+
+        # Associar imagens dinamicamente
+        top_sellers['photo'] = top_sellers['name'].apply(get_corretor_image)
+        top_sellers['medal'] = top_sellers['rank'].apply(get_medal)
+
+        # Títulos para o ranking
+        titles = [
+            'Melhor Vendedor',
+            'Destaque em Vendas',
+            'Alto Desempenho',
+            'Crescimento Constante',
+            'Vendedor Promissor'
+        ]
+        top_sellers['title'] = titles[:len(top_sellers)]
+
+        # Exibir ranking dos vendedores
+        cols = st.columns(len(top_sellers))
+
+        for idx, (_, row) in enumerate(top_sellers.iterrows()):
+            with cols[idx]:
+                st.image(row['photo'], width=150)
+                st.write(f"### {row['medal']} #{row['rank']}")
+                st.write(f"{row['name']}")
+                st.write(f"{row['title']}")
+                st.write(f"Data: {row['Data da Venda']}")
+                st.markdown("---")
+                st.write(f"*Total Vendas:* R$ {row['Valor vendido']:,.2f} mil")
+                st.write(f"*Desconto Financeiro:* R$ {row['Desconto Financeiro']:,.2f}")
+                st.write(f"*Meta Atingida:* {row['author_percent']}%")
+                st.write(f"*Contratos:* {int(row['# Clientes'])}")
+                st.markdown("---")
+
+        # Estilo CSS para melhorar o layout
+        st.markdown("""
+        <style>
+            .stMarkdown {
+                font-size: 16px;
+            }
+            h3 {
+                margin-bottom: 0;
+            }
+            img {
+                border-radius: 50%;
+                margin-bottom: 1rem;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################################################
+
+
+
+
+
+
+
+
+        import streamlit as st
+        import pandas as pd
+        import os
+
+        # Display company logo
+        st.image("CEL1_Logo_RGB_PU_Positive-Transparent.png", width=200)
+
+        # Title
+        st.title("Top #5 Gerentes")
+
+        # Processar dados para o ranking
+        df_filtrado['Valor vendido'] = pd.to_numeric(df_filtrado['Valor vendido'], errors='coerce')
+        df_filtrado['Desconto Financeiro'] = pd.to_numeric(df_filtrado['Desconto Financeiro'], errors='coerce')
+        df_filtrado['# Clientes'] = pd.to_numeric(df_filtrado['# Clientes'], errors='coerce')
+
+        # Garantir que 'Data da Venda' é datetime
+        df_filtrado['Data da Venda'] = pd.to_datetime(df_filtrado['Data da Venda'], errors='coerce')
+
+        # Removendo valores nulos antes de agrupar
+        df_filtrado = df_filtrado.dropna(subset=['Valor vendido', 'Data da Venda'])
+
+        # Agrupamento de dados por GERENTE
+        top_sellers = df_filtrado.groupby('GERENTE').agg({
+            'Valor vendido': 'sum',
+            'Desconto Financeiro': 'sum',
+            'Data da Venda': lambda x: x.max(),
+            '# Clientes': 'count'
+        }).reset_index()
+
+        # Renomear colunas para facilitar a manipulação
+        top_sellers.columns = ['name', 'Valor vendido', 'Desconto Financeiro', 'Data da Venda', '# Clientes']
+
+        # Ordenar e selecionar o top 5
+        top_sellers = top_sellers.sort_values('Valor vendido', ascending=False).head(5)
+
+        # Cálculos adicionais
+        top_sellers['rank'] = range(1, len(top_sellers) + 1)
+        top_sellers['author_percent'] = (top_sellers['Valor vendido'] / top_sellers['Valor vendido'].sum() * 100).round(0)
+        top_sellers['Valor vendido'] = (top_sellers['Valor vendido'] / 1000).round(0)
+        top_sellers['Data da Venda'] = top_sellers['Data da Venda'].dt.strftime('%d/%m/%Y')
+
+        # Função para buscar a imagem do gerente
+        def get_gerente_image(name):
+            caminho = f"imagens_corretores/{name}.png"
+            return caminho if os.path.isfile(caminho) else "imagens_corretores/default.png"
+
+        # Função para definir a medalha
+        def get_medal(rank):
+            if rank == 1:
+                return "🥇"
+            elif rank == 2:
+                return "🥈"
+            elif rank == 3:
+                return "🥉"
+            elif rank == 4:
+                return "🏅 Destaque"
+            elif rank == 5:
+                return "🎖️ Destaque"
+            else:
+                return ""
+
+        # Associar imagens dinamicamente
+        top_sellers['photo'] = top_sellers['name'].apply(get_gerente_image)
+        top_sellers['medal'] = top_sellers['rank'].apply(get_medal)
+
+        # Títulos para o ranking
+        titles = [
+            'Melhor Gerente',
+            'Destaque em Vendas',
+            'Alto Desempenho',
+            'Crescimento Constante',
+            'Gerente Promissor'
+        ]
+        top_sellers['title'] = titles[:len(top_sellers)]
+
+        # Exibir ranking dos gerentes
+        cols = st.columns(len(top_sellers))
+
+        for idx, (_, row) in enumerate(top_sellers.iterrows()):
+            with cols[idx]:
+                st.image(row['photo'], width=150)
+                st.write(f"### {row['medal']} #{row['rank']}")
+                st.write(f"{row['name']}")
+                st.write(f"{row['title']}")
+                st.write(f"Data: {row['Data da Venda']}")
+                st.markdown("---")
+                st.write(f"*Total Vendas:* R$ {row['Valor vendido']:,.2f} mil")
+                st.write(f"*Desconto Financeiro:* R$ {row['Desconto Financeiro']:,.2f}")
+                st.write(f"*Meta Atingida:* {row['author_percent']}%")
+                st.write(f"*Contratos:* {int(row['# Clientes'])}")
+                st.markdown("---")
+
+        # Estilo CSS para melhorar o layout
+        st.markdown("""
+        <style>
+            .stMarkdown {
+                font-size: 16px;
+            }
+            h3 {
+                margin-bottom: 0;
+            }
+            img {
+                border-radius: 50%;
+                margin-bottom: 1rem;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+
+        ################################################################################
+  
+
+
+        # Tratamento das colunas numéricas
+        df_filtrado['Valor vendido'] = pd.to_numeric(df_filtrado['Valor vendido'], errors='coerce').fillna(0)
+        df_filtrado['Desconto Financeiro'] = pd.to_numeric(df_filtrado['Desconto Financeiro'], errors='coerce').fillna(0)
+        df_filtrado.fillna("Desconhecido", inplace=True)
+
+        # Mapeamento entre gerente e caminho da imagem
+        mapa_imagens = {
+            'Gerente1': 'imagens_gerentes/Gerente1.png',
+            'Gerente2': 'imagens_gerentes/Gerente2.png',
+            'Gerente3': 'imagens_gerentes/Gerente3.png',
+            'Gerente4': 'imagens_gerentes/Gerente4.png',
+            'Todos': 'imagens_gerentes/A_equipe.png'
+        }
+
+
+
+        # Variáveis com métricas de vendas
+        total_vendido = df_filtrado['Valor vendido'].sum()
+        total_assinados = df_filtrado[df_filtrado['Status 1'] == 'ASSINADO'].shape[0]
+        total_cancelados = df_filtrado[df_filtrado['Status 2'] == 'CANCELADO'].shape[0]
+        total_desconto = df_filtrado['Desconto Financeiro'].sum()
+        origem_vendas = df_filtrado['Origem da venda'].value_counts()
+        latencia_media = df_filtrado['Latencia da Venda'].mean() if 'Latencia da Venda' in df_filtrado else None
+
+        # Construção do texto de storytelling
+        story = f"""
+        ## 📊 Storytelling de Vendas - {gerente}
+                {gerente}, tem um total vendido de R$ {total_vendido:,.2f}, com incríveis 📝{total_assinados} Clientes, no perído teve 
+        ❌{total_cancelados} de contratos cancelados e concedeu em suas negociações um totasl de 💸 R$ {total_desconto:,.2f} em descontos.  
+       
+
+        """
+
+        if latencia_media:
+            story += f"- **⏳ Média de Latência até Assinatura:** {latencia_media:.2f} dias\n"
+
+        story += "\n### 🔍 Origem das Vendas:\n"
+        for origem, qtd in origem_vendas.items():
+            story += f"- {origem}: {qtd} vendas\n"
+
+        # Exibindo o texto de storytelling
+        st.markdown(story)
+
+#########################################################################################
+
+        # Agrupamento para Sunburst com percentuais
+        df_filtrado_agg = df_filtrado.groupby(
+            ['GERENTE', 'Tipo unidade semanas', 'Campanha', 'Tipo de Venda', 'Origem da venda'],
+            as_index=False
+        ).agg({'Valor vendido': 'sum'})
+
+        df_filtrado_agg['Percentual'] = (df_filtrado_agg['Valor vendido'] / df_filtrado_agg['Valor vendido'].sum()) * 100
+
+        # Sunburst percentual
+        fig_sunburst = px.sunburst(
+            df_filtrado_agg,
+            path=['GERENTE', 'Tipo unidade semanas', 'Campanha', 'Tipo de Venda', 'Origem da venda'],
+            values='Percentual',
+            color='Percentual',
+            color_continuous_scale='Blues',
+            title=f"Distribuição Percentual das Vendas ({gerente})"
+        )
+
+        fig_sunburst.update_layout(margin=dict(t=50, l=0, r=0, b=0), font=dict(size=12))
+
+        # Gráfico de barras com totais bem discreto (resumido)
+        totais = df_filtrado[['Valor vendido', 'Desconto Financeiro']].sum().reset_index()
+        fig_bar = px.bar(
+            totais,
+            x='index',
+            y=0,
+            labels={'index': 'Categoria', 0: 'Total'},
+            color='index',
+            color_discrete_sequence=['#a6cee3', '#b2df8a'],  
+            title="Totais Gerais"
+        )
+
+        fig_bar.update_layout(width=400, height=500, margin=dict(t=50, l=50))
+
+        # Exibir gráfico Sunburst e gráfico de barras
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.write("Gráfico Sunburst")
+            st.plotly_chart(fig_sunburst, use_container_width=True, key="sunburst_chart")
+
+        with col2:
+            st.write("Gráfico de Barras Totais")
+            st.plotly_chart(fig_bar, use_container_width=True, key="bar_chart")
+
+
+###########################################################################################
+
+        import pandas as pd
+        import streamlit as st
+
+        # Simulando o DataFrame (substitua pela sua importação real)
+        # from Base_Oficial import df_filtrado
+
+        # Exemplo de DataFrame
+        # df_filtrado = pd.read_csv("sua_base.csv")
+
+        # Verificar se as colunas necessárias existem
+        required_columns = ['Data da Venda', 'Valor vendido', 'GERENTE']
+        missing_columns = [col for col in required_columns if col not in df_filtrado.columns]
+
+        if missing_columns:
+            st.error(f"❌ Erro: As colunas {missing_columns} não foram encontradas no arquivo.")
+            st.stop()
+
+        # ============================
+        # 🔹 CONVERSÃO DE VALORES NUMÉRICOS
+        # ============================
+        df_filtrado['Valor vendido'] = (
+            df_filtrado['Valor vendido']
+            .astype(str)
+            .str.replace('R$', '', regex=False)
+            .str.replace('.', '', regex=False)
+            .str.replace(',', '.', regex=False)
+        )
+        df_filtrado['Valor vendido'] = pd.to_numeric(df_filtrado['Valor vendido'], errors='coerce').fillna(0)
+
+        # ============================
+        # 🔹 CONVERSÃO DE DATAS
+        # ============================
+        df_filtrado['Data da Venda'] = pd.to_datetime(df_filtrado['Data da Venda'], errors='coerce')
+        df_filtrado['Ano'] = df_filtrado['Data da Venda'].dt.year
+        df_filtrado['Mês'] = df_filtrado['Data da Venda'].dt.month
+
+        # ============================
+        # 🔹 Sidebar com Filtros
+        # ============================
+        gerente = ['Todos'] + sorted(df_filtrado['GERENTE'].unique())
+        gerente = st.sidebar.selectbox("Selecione o Gerente:", gerente)
+
+        anos_disponiveis = ['Todos'] + sorted(df_filtrado['Ano'].dropna().astype(int).unique())
+        ano_selecionado = st.sidebar.selectbox("Selecione o Ano:", anos_disponiveis)
+
+        # Aplicar os filtros no DataFrame
+        df_filtrado = df_filtrado.copy()
+
+        if gerente != 'Todos':
+            df_filtrado = df_filtrado[df_filtrado['GERENTE'] == gerente]
+
+        if ano_selecionado != 'Todos':
+            df_filtrado = df_filtrado[df_filtrado['Ano'] == ano_selecionado]
+
+        # ============================
+        # 🔹 Agrupar os dados por Ano e Mês
+        # ============================
+        vendas_por_ano_mes = df_filtrado.groupby(['Ano', 'Mês']).agg({
+            'Valor vendido': 'sum'
+        }).reset_index()
+
+        # Ordenar os dados por "Mês"
+        vendas_por_ano_mes = vendas_por_ano_mes.sort_values('Mês')
+
+        # ============================
+        # 🔹 Preparar os dados para o gráfico
+        # ============================
+        data_list = [['Mês']]
+        anos = sorted(vendas_por_ano_mes['Ano'].unique())
+
+        # Adiciona os anos como colunas no gráfico
+        for ano in anos:
+            data_list[0].append(str(int(ano)))
+
+        # Preencher os dados por mês e ano
+        for mes in range(1, 13):  # Meses de 1 a 12
+            linha = [mes]
+            for ano in anos:
+                valor = vendas_por_ano_mes[
+                    (vendas_por_ano_mes['Ano'] == ano) & (vendas_por_ano_mes['Mês'] == mes)
+                ]['Valor vendido'].sum()
+                linha.append(float(valor))
+            data_list.append(linha)
+
+ # Filtrar pelo gerente selecionado
+        if gerente != 'Todos':
+            df_filtrado = df_filtrado[df_filtrado['GERENTE'] == gerente]
+        else:
+            df_filtrado = df_filtrado.copy()
+
+        st.success(f"Gráfico especifico : '{gerente}'")
+
+        # ============================
+        # 🔹 Código HTML/JavaScript para o gráfico do Google Charts (LineChart)
+        # ============================
+        google_charts_code = f"""
+        <html>
+        <head>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load('current', {{'packages':['corechart']}});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {{
+                var data = google.visualization.arrayToDataTable({data_list});
+
+                var options = {{
+                title: 'Valor Vendido por Mês {gerente}',
+                curveType: 'function',
+                legend: {{ position: 'bottom' }},
+                hAxis: {{
+                    title: 'Mês',
+                    ticks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                }},
+                vAxis: {{
+                    title: 'Valor Vendido (R$)',
+                    format: 'R$ #,###',
+                }},
+                }};
+
+                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                chart.draw(data, options);
+            }}
+            </script>
+        </head>
+        <body>
+            <div id="curve_chart" style="width: 100%; height: 500px;"></div>
+        </body>
+        </html>
+        """
+
+        # ✅ Exibe o gráfico no Streamlit
+        st.components.v1.html(google_charts_code, height=600)
+
+################################################################################################
+
         # ============================
         # 🔹 LAYOUT: 2 COLUNAS E 2 LINHAS
         # ============================
@@ -1637,6 +2274,11 @@ if pagina == 'RANKING':
         # ============================
         with col1:
             st.subheader("Ranking de Vendas por GERENTE")
+                    # Verificar e converter a coluna "Latencia de compra" para valores numéricos
+            if 'Latencia de compra' in df_filtrado.columns:
+                df_filtrado['Latencia de compra'] = pd.to_numeric(df_filtrado['Latencia de compra'], errors='coerce').fillna(0)
+
+            # Agora, realizar o agrupamento e agregação
             ranking_gerente = df_filtrado.groupby('GERENTE').agg({
                 'Valor vendido': 'sum',
                 'PRODUTO': 'count',
@@ -1792,6 +2434,10 @@ if pagina == 'RANKING':
             )
             st.altair_chart(chart, use_container_width=True)
 
+###################################################################################################################
+
+            
+######################################################################################################
         # ============================
         # 🔹 PREPARAÇÃO DOS DADOS
         # ============================
@@ -1885,11 +2531,120 @@ if pagina == 'RANKING':
         # ============================
         # 🔹 TABELA DE DADOS (Opcional)
         # ============================
-        st.subheader("📋 Dados de Vendas por Ano e Gerente")
-        st.dataframe(ranking_gerente_ano)
+        #st.subheader("📋 Dados de Vendas por Ano e Gerente")
+        #st.dataframe(ranking_gerente_ano)
 
-    else:
-        st.write("Nenhum dado encontrado para o ranking.")
+    #else:
+        #st.write("Nenhum dado encontrado para o ranking.")
+
+###################################################################################################################
+
+
+####################################################################################################################
+
+        import pandas as pd
+        import streamlit as st
+        import altair as alt
+
+        # ============================
+        # 🔹 PREPARAÇÃO DOS DADOS
+        # ============================
+
+        # Remover espaços extras nos nomes das colunas
+        df_filtrado.columns = df_filtrado.columns.str.strip()
+
+        # Converter 'Data da Venda' para datetime e extrair o ano
+        df_filtrado['Data da Venda'] = pd.to_datetime(df_filtrado['Data da Venda'])
+        df_filtrado['Ano'] = df_filtrado['Data da Venda'].dt.year
+
+        # Verificar se 'Ano' existe e criar se necessário
+        if 'Ano' not in df_filtrado.columns:
+            df_filtrado['Ano'] = pd.to_datetime(df_filtrado['Data da Venda']).dt.year
+
+        # ============================
+        # 🔹 INTERFACE DO STREAMLIT
+        # ============================
+
+        # Título do app
+        st.title("📊 Ranking de Vendas por Corretor 1 por Ano (2022 - 2025)")
+
+        # Filtro de anos disponíveis
+        anos_disponiveis = sorted(df_filtrado['Ano'].unique().tolist())
+        anos_selecionados = st.multiselect(
+            '🔎 Selecione os Anos:', 
+            anos_disponiveis, 
+            default=anos_disponiveis,
+            key="multiselect_anos"  # Adicionando uma chave única
+        )
+
+        # Filtrar o DataFrame pelos anos selecionados
+        df_filtrado_anos = df_filtrado[df_filtrado['Ano'].isin(anos_selecionados)]
+
+        # ============================
+        # 🔹 AGRUPAMENTO DE DADOS
+        # ============================
+
+        # Agrupar por 'Corretor 1' e 'Ano' para somar os valores vendidos
+        ranking_corretor_ano = df_filtrado_anos.groupby(
+            ['Corretor 1', 'Ano'])['Valor vendido'].sum().reset_index()
+
+        # Ordenar por Ano e pelo maior valor vendido
+        ranking_corretor_ano = ranking_corretor_ano.sort_values(
+            ['Ano', 'Valor vendido'], ascending=[True, False])
+
+        # ============================
+        # 🔹 GRÁFICO ALTAIR (Com Layering Correto)
+        # ============================
+
+        # Criar gráfico de barras
+        bars = alt.Chart(ranking_corretor_ano).mark_bar().encode(
+            x=alt.X('Corretor 1:N', title='Corretor 1'),
+            y=alt.Y('Valor vendido:Q', title='Valor Vendido (R$)'),
+            color=alt.Color('Corretor 1:N', title='Corretor 1'),
+            tooltip=[
+                alt.Tooltip('Corretor 1:N', title='Corretor 1'),
+                alt.Tooltip('Ano:N', title='Ano'),
+                alt.Tooltip('Valor vendido:Q', title='Valor Vendido', format=',.2f')
+            ]
+        )
+
+        # Adicionar rótulos de valores nas barras
+        text = bars.mark_text(
+            align='center',
+            baseline='bottom',
+            dy=-5,  # Ajuste vertical do texto
+            fontSize=10
+        ).encode(
+            text=alt.Text('Valor vendido:Q', format=',.2f')
+        )
+
+        # Layer dos gráficos (barras + rótulos)
+        layered_chart = alt.layer(bars, text)
+
+        # Facetear o gráfico por Ano após o layering
+        final_chart = layered_chart.facet(
+            column=alt.Column('Ano:N', title='Ano')
+        ).configure_axis(
+            labelFontSize=12,
+            titleFontSize=14
+        ).configure_title(
+            fontSize=16
+        )
+
+        # ============================
+        # 🔹 EXIBIÇÃO NO STREAMLIT
+        # ============================
+
+        st.altair_chart(final_chart, use_container_width=True)
+
+        # ============================
+        # 🔹 TABELA DE DADOS (Opcional)
+        # ============================
+
+        #st.subheader("📋 Dados de Vendas por Ano e Corretor 1")
+        #st.dataframe(ranking_corretor_ano)
+
+####################################################################################################################
 
 # PÁGINA ORIGENS E ESTADOS
 elif pagina == 'Origens_Estados':
@@ -1919,8 +2674,33 @@ elif pagina == 'Origens_Estados':
         # 📊 1️⃣ TABELA: Origens e Estados
         # ============================
         with col1:
-            st.subheader("📋 Origens por Estado com # Clientes")
-            st.dataframe(origens_estados)
+
+            import pandas as pd
+            import plotly.express as px
+            import streamlit as st
+
+            # Carregar o DataFrame
+            #df = pd.read_excel('BASEOFICIAL0703.xlsx', sheet_name='Consulta Contratos')
+
+            # Agrupar os dados por UF e somar o Valor vendido
+            df_grouped = df.groupby('UF').agg({'Valor vendido': 'sum'}).reset_index()
+
+            # Agrupando UFs com vendas menores que um valor limite
+            limite = 100000  # Ajuste este valor conforme necessário
+            df_grouped.loc[df_grouped['Valor vendido'] < limite, 'UF'] = 'Outros Estados'
+
+            # Reagrupando após a substituição
+            df_grouped = df_grouped.groupby('UF').agg({'Valor vendido': 'sum'}).reset_index()
+
+            # Criando o gráfico de pizza
+            fig = px.pie(df_grouped, values='Valor vendido', names='UF',
+                        title='Distribuição de Vendas por UF')
+
+            # Exibir o gráfico no Streamlit
+            st.plotly_chart(fig, use_container_width=True)
+
+
+
 
         # ============================
         # 📊 2️⃣ GRÁFICO: Valor Vendido por Origem
@@ -3268,6 +4048,7 @@ if pagina == 'GRÁFICOS VIABILIDADE':
 if pagina == 'GRÁFICOS DISTRATOS':
     st.title('📈 GRÁFICOS DISTRATOS')
     if not df_filtrado.empty:
+     
 
         ###############################DISTRATOS GRAFICO INICIO##################################################
 
@@ -4420,6 +5201,202 @@ if pagina == 'Simulador':
     st.title('📈 Testes')
     if not df_filtrado.empty:
 
+
+
+
+
+
+
+
+  
+
+
+                
+        # Garantir que "Data da Venda" está no formato datetime
+        df_filtrado["Data da Venda"] = pd.to_datetime(df_filtrado["Data da Venda"], errors="coerce")
+        # Título do dashboard
+        st.title('Dashboard de Vendas Completo')
+
+        # Adicionar seleção de ano
+        year_options = [2022, 2023, 2024, 2025]
+        selected_year = st.selectbox('Selecione o Ano:', year_options)
+
+        # Filtrar dados pelo ano selecionado
+        df['Ano'] = pd.to_datetime(df['Data da venda']).dt.year
+        df['Mês'] = pd.to_datetime(df['Data da venda']).dt.month
+        df_filtrado = df[df['Ano'] == selected_year]
+
+        # Agregando os dados por mês
+        vendas_mensais = df_filtrado.groupby('Mês').agg({
+            'Valor vendido': 'sum',
+            'Desconto Financeiro': 'sum'
+        }).reset_index()
+
+        # Calculando a média móvel
+        vendas_mensais['Média Móvel'] = vendas_mensais['Valor vendido'].rolling(window=3, min_periods=1).mean()
+
+        # Preparando os dados para o gráfico
+        data_list = [
+            ['Mês', 'Valor Vendido', 'Desconto', 'Média Móvel']
+        ]
+        data_list.extend([
+            [f'Mês {row["Mês"]}',
+            float(row['Valor vendido']),
+            float(row['Desconto Financeiro']),
+            float(row['Média Móvel'])] 
+            for _, row in vendas_mensais.iterrows()
+        ])
+
+        # Código HTML/JavaScript para o gráfico do Google Charts
+        google_charts_code = f"""
+        <html>
+        <head>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load('current', {{'packages':['corechart']}});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {{
+                var data = google.visualization.arrayToDataTable({data_list});
+
+                var formatter = new google.visualization.NumberFormat({{prefix: 'R$ ', decimalSymbol: ',', groupingSymbol: '.', negativeColor: 'red', negativeParens: true}});
+                formatter.format(data, 1); // Formato para Valor Vendido
+                formatter.format(data, 2); // Formato para Desconto
+                formatter.format(data, 3); // Formato para Média Móvel
+
+                var options = {{
+                    title: 'Análise de Vendas Mensal',
+                    subtitle: 'Valores e Tendências',
+                    height: 600,
+                    backgroundColor: 'transparent',
+                    titleTextStyle: {{ color: '#FFFFFF', fontSize: 20 }},
+                    legendTextStyle: {{ color: '#FFFFFF' }},
+                    hAxis: {{ 
+                        textStyle: {{ color: '#FFFFFF' }},
+                        title: 'Mês',
+                        titleTextStyle: {{ color: '#FFFFFF' }}
+                    }},
+                    vAxis: {{ 
+                        textStyle: {{ color: '#FFFFFF' }},
+                        title: 'Valores (R$)',
+                        titleTextStyle: {{ color: '#FFFFFF' }},
+                        format: 'currency'
+                    }},
+                    seriesType: 'bars',
+                    series: {{
+                        0: {{ color: '#4285F4' }},
+                        1: {{ color: '#DB4437' }},
+                        2: {{ type: 'line', color: '#FFA500', lineWidth: 3 }}
+                    }}
+                }};
+
+                var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }}
+            </script>
+        </head>
+        <body style="background: transparent;">
+            <div id="chart_div" style="width: 100%; height: 600px;"></div>
+        </body>
+        </html>
+        """
+
+        # Exibe o gráfico no Streamlit
+        st.components.v1.html(google_charts_code, height=700)
+
+        # Exibindo estatísticas resumidas
+        st.subheader('Estatísticas Resumidas')
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            total_vendas = vendas_mensais['Valor vendido'].sum()
+            st.metric('Total de Vendas', f'R$ {total_vendas:,.2f}'.replace(',', '_').replace('.', ',').replace('_', '.'))
+
+        with col2:
+            total_descontos = vendas_mensais['Desconto Financeiro'].sum()
+            st.metric('Total de Descontos', f'R$ {total_descontos:,.2f}'.replace(',', '_').replace('.', ',').replace('_', '.'))
+
+        with col3:
+            media_vendas = vendas_mensais['Valor vendido'].mean()
+            st.metric('Média Mensal de Vendas', f'R$ {media_vendas:,.2f}'.replace(',', '_').replace('.', ',').replace('_', '.'))
+
+        # Agregando os dados
+        vendas_agregadas = df_filtrado.groupby(['Tipo unidade semanas', 'Campanha', 'Tipo de Venda', 'Origem da venda']).\
+        agg({
+            'Valor vendido': 'sum',
+            'Desconto Financeiro': 'sum'
+        }).reset_index()
+
+        # Convertendo os dados para o formato do Google Charts
+        data_list = [
+            ['Tipo unidade semanas', 'Campanha', 'Tipo de Venda', 'Origem da venda', 'Valor vendido', 'Desconto Financeiro']
+        ]
+        data_list.extend([
+            [str(row['Tipo unidade semanas']),
+            str(row['Campanha']),
+            str(row['Tipo de Venda']),
+            str(row['Origem da venda']),
+            float(row['Valor vendido']),
+            float(row['Desconto Financeiro'])] 
+            for _, row in vendas_agregadas.iterrows()
+        ])
+
+        # Código HTML/JavaScript para o gráfico do Google Charts
+        google_charts_code = f"""
+        <html>
+        <head>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load('current', {{'packages':['bar']}});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {{
+                var data = google.visualization.arrayToDataTable({data_list});
+
+                var options = {{
+                    chart: {{
+                        title: 'Análise de Vendas',
+                        subtitle: 'Por Tipo de Unidade, Campanha, Tipo de Venda e Origem',
+                    }},
+                    height: 600,
+                    backgroundColor: 'transparent',
+                    titleTextStyle: {{ color: '#FFFFFF' }},
+                    legendTextStyle: {{ color: '#FFFFFF' }},
+                    hAxis: {{ textStyle: {{ color: '#FFFFFF' }} }},
+                    vAxis: {{ textStyle: {{ color: '#FFFFFF' }} }},
+                    bars: 'horizontal',
+                    axes: {{
+                        x: {{
+                            0: {{ side: 'top', label: 'Valores (R$)' }}
+                        }}
+                    }},
+                    series: {{
+                        0: {{ color: '#4285F4' }},
+                        1: {{ color: '#DB4437' }}
+                    }}
+                }};
+
+                var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }}
+            </script>
+        </head>
+        <body style="background: transparent;">
+            <div id="columnchart_material" style="width: 100%; height: 600px;"></div>
+        </body>
+        </html>
+        """
+
+        # Exibe o gráfico no Streamlit
+        st.components.v1.html(google_charts_code, height=700)
+
+
+
+
+
+
+
+
         import pandas as pd
         import streamlit as st
 
@@ -4665,3 +5642,96 @@ if pagina == 'Simulador':
                     display_tables(processed_data)
                 else:
                     st.warning("Nenhum dado válido para análise")
+
+
+
+   # Create funnel chart for sales by origin
+        def create_sales_funnel_chart(df):
+            # Group by 'Origem da Venda' and sum 'Valor vendido'
+            funnel_data = df.groupby('Origem da venda')['Valor vendido'].sum().reset_index()
+            # Sort values in descending order
+            funnel_data = funnel_data.sort_values('Valor vendido', ascending=True)
+            
+            # Create funnel chart
+            fig = px.funnel(funnel_data, 
+                            x='Valor vendido', 
+                            y='Origem da venda',
+                            title='Funil de Vendas por Origem')
+            
+            # Update layout
+            fig.update_layout(
+                showlegend=True,
+                margin=dict(l=10, r=10, t=60, b=10),
+                height=400
+            )
+            
+            # Format values to Brazilian currency
+            fig.update_traces(textinfo='value+percent initial',
+                             texttemplate='R$ %{value:,.2f}<br>%{percentInitial:.1%}')
+            
+            return fig
+
+        # Add the funnel chart to the dashboard
+        st.plotly_chart(create_sales_funnel_chart(df_filtrado), use_container_width=True)
+
+
+
+
+
+        # Título do dashboard
+        st.title('Dashboard de Vendas')
+
+        # Agregando os dados por origem da venda
+        vendas_por_origem = df.groupby('Origem da venda')['Valor vendido'].sum().reset_index()
+
+        # Convertendo os dados para o formato do Google Charts
+        data_list = [['Origem da venda', 'Valor vendido']]
+        data_list.extend([[str(row['Origem da venda']), row['Valor vendido']] for _, row in vendas_por_origem.iterrows()])
+
+        # Código HTML/JavaScript para o gráfico do Google Charts
+        google_charts_code = f"""
+        <html>
+        <head>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load('current', {{'packages':['corechart']}});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {{        
+                var data = google.visualization.arrayToDataTable({data_list});
+
+                var options = {{
+                    title: 'Distribuição de Vendas por Origem',
+                    height: 500,
+                    is3D: true,
+                    backgroundColor: 'transparent',
+                    titleTextStyle: {{ color: '#FFFFFF', fontSize: 18 }},
+                    legendTextStyle: {{ color: '#000000' }},
+                    pieSliceTextStyle: {{ color: '#000000' }},
+                    tooltip: {{ 
+                        format: 'currency',
+                        formatOptions: {{
+                            style: 'currency',
+                            currency: 'BRL',
+                            minimumFractionDigits: 2
+                        }}
+                    }}
+                }};
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+            }}
+            </script>
+        </head>
+        <body style="background: transparent;">
+            <div id="piechart" style="width: 100%; height: 500px;"></div>
+        </body>
+        </html>
+        """
+
+        # Exibe o gráfico no Streamlit
+        st.components.v1.html(google_charts_code, height=600)
+
+
+
+
