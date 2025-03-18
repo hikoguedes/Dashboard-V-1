@@ -1286,7 +1286,7 @@ if pagina == 'HOME':
             "Percentual (%)": [percentual_ganho_viabilidade, percentual_desconto_viabilidade]
         })
 
-        resultado_final
+        #resultado_final
 
 
          # _____________________________________________________________________________________#
